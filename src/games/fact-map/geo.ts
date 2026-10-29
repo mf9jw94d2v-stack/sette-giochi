@@ -1,17 +1,14 @@
 /**
- * Map geometry for Fact Map, kept pure so it can be tested without a browser.
+ * Map geometry for Atlante, kept pure so it can be tested without a browser.
  *
- * The map is drawn in an equirectangular projection: x = longitude + 180,
- * y = 90 − latitude, so the whole world is a 360 × 180 box. A `View` is the
- * part of that box currently on screen — panning moves it, zooming shrinks it.
- * Its aspect ratio always matches the screen's, so nothing is ever stretched.
+ * The map is drawn in the Equal Earth projection (projection.ts) inside a
+ * WORLD_W × WORLD_H box. A `View` is the part of that box currently on
+ * screen — panning moves it, zooming shrinks it. Its aspect ratio always
+ * matches the screen's, so nothing is ever stretched.
  */
+import { project, unproject, WORLD_H, WORLD_W } from "./projection";
 
-export const WORLD_W = 360;
-export const WORLD_H = 180;
-
-export const px = (lon: number): number => lon + 180;
-export const py = (lat: number): number => 90 - lat;
+export { project, WORLD_H, WORLD_W };
 
 export interface View {
   x: number;
@@ -43,10 +40,9 @@ export function fitWorld(aspect: number): View {
  */
 export function playView(aspect: number): View {
   if (!(aspect > 0) || aspect >= 1.2) return fitWorld(aspect);
-  const h = 72 + 56;
+  const h = project(0, -56)[1] - project(0, 72)[1];
   const w = h * aspect;
-  const cx = px(15);
-  const cy = py((72 - 56) / 2);
+  const [cx, cy] = project(15, (72 - 56) / 2);
   return clampView({ x: cx - w / 2, y: cy - h / 2, w, h }, aspect);
 }
 
@@ -89,7 +85,7 @@ export function screenToLonLat(
   fx: number,
   fy: number,
 ): { lon: number; lat: number } {
-  return { lon: v.x + fx * v.w - 180, lat: 90 - (v.y + fy * v.h) };
+  return unproject(v.x + fx * v.w, v.y + fy * v.h);
 }
 
 /** Fractions of the screen covered by floating panels on each side. */
@@ -118,8 +114,9 @@ export function frame(
   const left = safe.left ?? 0;
   const right = safe.right ?? 0;
   if (points.length === 0) return playView(aspect);
-  const xs = points.map(([lon]) => px(lon));
-  const ys = points.map(([, lat]) => py(lat));
+  const xy = points.map(([lon, lat]) => project(lon, lat));
+  const xs = xy.map(([x]) => x);
+  const ys = xy.map(([, y]) => y);
   const minX = Math.min(...xs) - marginDeg;
   const maxX = Math.max(...xs) + marginDeg;
   const minY = Math.min(...ys) - marginDeg;
@@ -198,9 +195,9 @@ export function greatCircle(
 /** Polyline in map coordinates. */
 export function pathOf(points: readonly [number, number][]): string {
   return points
-    .map(
-      ([lon, lat], i) =>
-        `${i ? "L" : "M"}${px(lon).toFixed(2)} ${py(lat).toFixed(2)}`,
-    )
+    .map(([lon, lat], i) => {
+      const [x, y] = project(lon, lat);
+      return `${i ? "L" : "M"}${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
     .join(" ");
 }

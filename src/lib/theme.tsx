@@ -25,14 +25,20 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+/**
+ * Sette Giochi is a dark site by default: with no stored choice, the theme
+ * is dark. Light and "follow the system" remain a choice in the settings.
+ */
+export const DEFAULT_THEME: ThemeChoice = "dark";
+
 function readStoredChoice(): ThemeChoice {
   try {
     const v = localStorage.getItem(STORAGE_KEY);
-    if (v === "light" || v === "dark") return v;
+    if (v === "light" || v === "dark" || v === "system") return v;
   } catch {
     /* ignore */
   }
-  return "system";
+  return DEFAULT_THEME;
 }
 
 function systemPrefersDark(): boolean {
@@ -58,12 +64,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setResolved(next);
   }, []);
 
-  // Apply whenever the choice changes; persist non-system choices.
+  // Apply whenever the choice changes, and remember it (including "system",
+  // which is no longer the default and so must be stored to be kept).
   useEffect(() => {
     apply(resolve(choice));
     try {
-      if (choice === "system") localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, choice);
+      localStorage.setItem(STORAGE_KEY, choice);
     } catch {
       /* ignore */
     }

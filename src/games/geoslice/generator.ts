@@ -7,7 +7,8 @@ import { sessionContentHash } from "./validator";
 import { mean, round3, tierOf } from "@/games/difficulty";
 import { roundDifficulty } from "./difficulty";
 
-export const GEO_GENERATOR_VERSION = "geoslice-1.1.0";
+// 2.0.0: real city positions, populations and country outlines.
+export const GEO_GENERATOR_VERSION = "geoslice-2.0.0";
 
 export function pickRegions(
   seed: string,

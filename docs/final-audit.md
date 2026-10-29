@@ -51,13 +51,13 @@ Ultima esecuzione completa in locale: 28 ottobre 2026, tutti verdi (165 unit, 68
 | Gazillion analizzato e integrato  | COMPLETATO E VERIFICATO | `src/games/gazillion/`, formula verificata, 3 file di test                                                                    |
 
 **Limitazioni dichiarate** (dettagli in `docs/game-analysis.md`): la rarità di
-Krillion è **pre-autorata**, non misurata sulla folla come nell'originale; le
-regioni di GeoSlice sono **layout stilizzati**, non cartografia. Le sagome di
-Size It Up sono disegni originali semplificati — riconoscibili e normalizzate
-sull'asse misurato, ma non illustrazioni fedeli; **il catalogo non contiene
-animali**, perché i tentativi di disegnarli non erano riconoscibili e una
-sagoma che non si riconosce rende il confronto più difficile, non più facile.
-Nessuna di queste è presentata come dato reale.
+Abissi (Krillion) è **pre-autorata**, non misurata sulla folla come
+nell'originale. Taglio (GeoSlice) usa dal 29/10 **dati reali**: contorni e città
+di Natural Earth, popolazione delle aree urbane (stime, non censimenti); Grecia
+e Argentina sono escluse perché una sola città supera metà della popolazione
+considerata. Atlante usa Natural Earth 1:50m (laghi non ritagliati). Le sagome
+di In Scala sono disegnate in metri con proporzioni pubbliche dove esistono,
+semplificate; **il catalogo non contiene animali**.
 
 ## 2. Architettura
 

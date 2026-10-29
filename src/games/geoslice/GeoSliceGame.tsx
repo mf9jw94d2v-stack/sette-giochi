@@ -282,8 +282,9 @@ export function GeoSliceGame({
           className="mt-auto text-xs leading-relaxed"
           style={{ color: "var(--gs-muted)" }}
         >
-          Disposizione delle città stilizzata, non cartografica; popolazioni
-          approssimate. Conta solo da che parte della linea cade ogni città.
+          Confini e città nella loro posizione reale; popolazione dell&apos;area
+          urbana (stime Natural Earth). Conta da che parte della linea cade ogni
+          città.
         </p>
       </aside>
 

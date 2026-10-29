@@ -2,6 +2,9 @@ import type { CSSProperties, ReactNode } from "react";
 import { GAME_THEMES } from "@/games/theme";
 import { getGameMeta } from "@/games/registry";
 import { cn } from "@/lib/utils";
+import { project, WORLD_H, WORLD_W } from "@/games/fact-map/projection";
+import { WORLD_COVER_PATH } from "./worldCover";
+import { COVER_CITIES, COVER_OUTLINE } from "./geosliceCover";
 import type { GameId } from "@/types/game";
 
 /**
@@ -128,83 +131,126 @@ function Grid({
   return <g strokeWidth="1">{lines}</g>;
 }
 
-/** Fact Map: graticule, a pin and the great-circle arc to the true place. */
+/** Atlante: the real continents, a pin, and the arc to the true place. */
 function FactMapArt() {
+  // The game's own projection and outline (Natural Earth, simplified).
+  const k = 400 / WORLD_W;
+  const ty = 200 - (WORLD_H * k) / 2;
+  const at = (lon: number, lat: number) => {
+    const [x, y] = project(lon, lat);
+    return [x * k, y * k + ty] as const;
+  };
+  const [gx, gy] = at(-66.9, 10.5); // the guess
+  const [tx, ty2] = at(-88.57, 20.68); // the true place
   return (
     <>
-      <Grid step={40} stroke="rgba(43,39,34,0.09)" />
       <path
-        d="M110 205 Q 205 70 300 160"
+        d={WORLD_COVER_PATH}
+        transform={`translate(0 ${ty}) scale(${k})`}
+        fill="#28302a"
+        stroke="#7a8571"
+        strokeWidth={0.6 / k}
+      />
+      <path
+        d={`M${gx} ${gy - 4} Q ${(gx + tx) / 2 + 10} ${Math.min(gy, ty2) - 38} ${tx} ${ty2}`}
         fill="none"
-        stroke="#2b2722"
+        stroke="#ece6d9"
         strokeWidth="2.5"
-        strokeDasharray="7 7"
+        strokeDasharray="6 6"
         strokeLinecap="round"
       />
       <circle
-        cx="300"
-        cy="160"
-        r="9"
-        fill="#047857"
-        stroke="#faf7f0"
+        cx={tx}
+        cy={ty2}
+        r="8"
+        fill="#34d399"
+        stroke="#0e1a24"
         strokeWidth="3"
       />
       <path
-        d="M110 214 C 96 196 88 184 88 172 a22 22 0 1 1 44 0 c0 12 -8 24 -22 42z"
-        fill="#c2410c"
+        d={`M${gx} ${gy} c-7 -10 -12 -16 -12 -23 a12 12 0 1 1 24 0 c0 7 -5 13 -12 23z`}
+        fill="#f97316"
       />
-      <circle cx="110" cy="172" r="7" fill="#fff7ed" />
+      <circle cx={gx} cy={gy - 23} r="4.5" fill="#1c0a02" />
     </>
   );
 }
 
-/** GeoSlice: a field of cities cut in two by one straight line. */
+/** Taglio: a real country, its cities, and the one straight cut. */
 function GeoSliceArt() {
-  // The cut runs from (70, 320) to (330, 60); cities left of it are side A.
-  const side = (x: number, y: number) =>
-    (330 - 70) * (y - 320) - (60 - 320) * (x - 70) < 0;
-  const cities = scatter(70, 7).map(([a, b, c]) => {
-    const x = 50 + a * 300;
-    const y = 70 + b * 230;
-    return { x, y, r: 1.6 + c * c * 5, a: side(x, y) };
-  });
+  // Cut through Italy from north-west to south-east, as the game draws it.
+  const ax = 70,
+    ay = 300,
+    bx = 345,
+    by = 95;
+  const sideA = (x: number, y: number) =>
+    (bx - ax) * (y - ay) - (by - ay) * (x - ax) < 0;
+  const maxPop = Math.max(...COVER_CITIES.map((c) => c[2]));
   return (
     <>
-      <Grid step={25} stroke="rgba(148,163,184,0.07)" />
-      <Grid step={100} stroke="rgba(148,163,184,0.14)" />
-      {cities.map((p, i) => (
-        <g key={i} fill={p.a ? "#22d3ee" : "#fb923c"}>
-          <circle cx={p.x} cy={p.y} r={p.r * 2.6} opacity="0.18" />
-          <circle cx={p.x} cy={p.y} r={p.r} />
+      <Grid step={25} stroke="rgba(148,163,184,0.06)" />
+      {/* The whole country inside the band a landscape cover shows. */}
+      <g transform="translate(200 200) scale(0.62) translate(-200 -200)">
+        <defs>
+          <clipPath id="cv-gs-land">
+            <path d={COVER_OUTLINE} />
+          </clipPath>
+        </defs>
+        <path
+          d={COVER_OUTLINE}
+          fill="#111b2f"
+          stroke="#3a4b6b"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <g clipPath="url(#cv-gs-land)" opacity="0.22">
+          <polygon
+            points={`${ax - 400},${ay + 300} ${bx + 400},${by - 300} -400,-400`}
+            fill="#22d3ee"
+          />
+          <polygon
+            points={`${ax - 400},${ay + 300} ${bx + 400},${by - 300} 800,800`}
+            fill="#fb923c"
+          />
         </g>
-      ))}
-      <line
-        x1="70"
-        y1="320"
-        x2="330"
-        y2="60"
-        stroke="#f8fafc"
-        strokeWidth="2.5"
-      />
-      <circle
-        cx="200"
-        cy="190"
-        r="7"
-        fill="#060b16"
-        stroke="#f8fafc"
-        strokeWidth="2.5"
-      />
+        {COVER_CITIES.map(([x, y, pop], i) => {
+          const r = 3 + Math.sqrt(pop / maxPop) * 9;
+          const c = sideA(x, y) ? "#22d3ee" : "#fb923c";
+          return (
+            <g key={i} fill={c}>
+              <circle cx={x} cy={y} r={r * 2.1} opacity="0.2" />
+              <circle cx={x} cy={y} r={r} stroke="#060b16" strokeWidth="2" />
+            </g>
+          );
+        })}
+        <line
+          x1={ax - 60}
+          y1={ay + 45}
+          x2={bx + 60}
+          y2={by - 45}
+          stroke="#f8fafc"
+          strokeWidth="3"
+        />
+        <rect
+          x={(ax + bx) / 2 - 7}
+          y={(ay + by) / 2 - 7}
+          width="14"
+          height="14"
+          fill="#f8fafc"
+          transform={`rotate(45 ${(ax + bx) / 2} ${(ay + by) / 2})`}
+        />
+      </g>
     </>
   );
 }
 
-/** Gazillion: the timeline, the amber trap and the needle of the true year. */
+/** Epoche: the timeline, the amber trap and the needle of the true year. */
 function GazillionArt() {
   const stars = scatter(26, 3);
   return (
     <>
       <defs>
-        <linearGradient id="cv-gz" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="cv-gz" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#0c0a1d" />
           <stop offset="0.55" stopColor="#1e0b2e" />
           <stop offset="1" stopColor="#4c0519" />
@@ -266,69 +312,70 @@ function GazillionArt() {
       <rect x="254" y="150" width="12" height="70" rx="6" fill="#fbbf24" />
       <line
         x1="218"
-        y1="125"
+        y1="118"
         x2="218"
         y2="215"
         stroke="#4ade80"
         strokeWidth="3"
       />
-      <circle cx="218" cy="122" r="6" fill="#4ade80" />
+      <circle cx="218" cy="115" r="7" fill="#4ade80" />
     </>
   );
 }
 
-/** Estimania: an order of magnitude set like a magazine figure, and the ruler. */
+/** Stima: an order of magnitude, the ruler of powers of ten, guess and truth. */
 function EstimaniaArt() {
+  const x = (i: number) => 52 + i * 37;
   return (
     <>
-      <line
-        x1="40"
-        y1="88"
-        x2="360"
-        y2="88"
-        stroke="#d8d1c3"
-        strokeWidth="1.5"
-      />
       <text
         x="200"
-        y="200"
+        y="182"
         textAnchor="middle"
         fontFamily="Fraunces, Georgia, serif"
-        fontSize="104"
+        fontSize="112"
         fontWeight="600"
-        fill="#0d9488"
+        fill="#2dd4bf"
       >
         10
-        <tspan fontSize="56" dy="-46">
+        <tspan fontSize="58" dy="-50">
           6
         </tspan>
       </text>
       <line
-        x1="50"
+        x1="40"
         y1="250"
-        x2="350"
+        x2="360"
         y2="250"
-        stroke="#1c1917"
+        stroke="#f1ebdf"
         strokeWidth="2"
       />
       {Array.from({ length: 9 }, (_, i) => (
-        <g key={i}>
-          <line
-            x1={50 + i * 37.5}
-            y1="242"
-            x2={50 + i * 37.5}
-            y2="258"
-            stroke="#1c1917"
-            strokeWidth="1.5"
-          />
-        </g>
+        <line
+          key={i}
+          x1={x(i)}
+          y1="242"
+          x2={x(i)}
+          y2="258"
+          stroke="#f1ebdf"
+          strokeWidth="1.5"
+          opacity={0.75}
+        />
       ))}
-      <path d="M275 236 l9 -14 h-18z" fill="#b45309" />
+      {/* The guess, one power of ten from the truth. */}
+      <path d={`M${x(6)} 236 l10 -15 h-20z`} fill="#fbbf24" />
+      <circle cx={x(5) + 6} cy="270" r="7" fill="#4ade80" />
+      <path
+        d={`M${x(5) + 6} 282 v8 h${x(6) - x(5) - 6} v-8`}
+        fill="none"
+        stroke="#aaa294"
+        strokeWidth="1.5"
+      />
     </>
   );
 }
 
-/** Plain: the altitude climbing in steps toward the mission line. */
+/** Quota: altitude climbing in steps toward the mission line. */
 function PlainArt() {
   return (
     <>
@@ -337,17 +384,18 @@ function PlainArt() {
         y1="95"
         x2="340"
         y2="95"
-        stroke="rgba(243,245,249,0.28)"
+        stroke="#d2fa4b"
+        strokeOpacity="0.45"
         strokeDasharray="4 7"
       />
       <path
         d="M45 300 H105 V268 H165 V236 H225 V178 H285 V128 H330"
         fill="none"
         stroke="#d2fa4b"
-        strokeWidth="3.5"
+        strokeWidth="4"
         strokeLinejoin="round"
       />
-      <path d="M332 128 l20 -8 l-6 8 l6 8z" fill="#d2fa4b" />
+      <path d="M332 128 l22 -9 l-6 9 l6 9z" fill="#d2fa4b" />
       <line
         x1="372"
         y1="60"
@@ -356,122 +404,150 @@ function PlainArt() {
         stroke="rgba(243,245,249,0.16)"
         strokeWidth="2"
       />
-      {[90, 150, 210, 270].map((y) => (
+      {[95, 150, 210, 270].map((y) => (
         <line
           key={y}
           x1="364"
           y1={y}
           x2="372"
           y2={y}
-          stroke="rgba(243,245,249,0.28)"
+          stroke="rgba(243,245,249,0.3)"
         />
       ))}
     </>
   );
 }
 
-/** Krillion: the depth gauge and the submersible going down. */
+/** Abissi: the rarer the answer, the deeper the dive. */
 function KrillionArt() {
+  // Three answers: common near the surface, rare in the deep. Narrower bar,
+  // rarer answer; the diver sits beside the rarest.
+  const answers = [
+    { y: 112, w: 150, o: 0.35 },
+    { y: 172, w: 96, o: 0.55 },
+    { y: 236, w: 46, o: 1 },
+  ];
   return (
     <>
       <defs>
         <linearGradient id="cv-kr" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#0b3a5b" />
-          <stop offset="0.38" stopColor="#06182a" />
+          <stop offset="0.4" stopColor="#06182a" />
           <stop offset="1" stopColor="#020409" />
         </linearGradient>
       </defs>
       <rect width="400" height="400" fill="url(#cv-kr)" />
-      <line x1="70" y1="40" x2="70" y2="360" stroke="rgba(56,189,248,0.25)" />
+      <line
+        x1="72"
+        y1="60"
+        x2="72"
+        y2="330"
+        stroke="rgba(56,189,248,0.3)"
+        strokeWidth="2"
+      />
       {Array.from({ length: 7 }, (_, i) => (
-        <g key={i}>
-          <line
-            x1="62"
-            y1={60 + i * 40}
-            x2="78"
-            y2={60 + i * 40}
-            stroke="rgba(56,189,248,0.4)"
-          />
-          <text
-            x="86"
-            y={65 + i * 40}
-            fontFamily="VT323, monospace"
-            fontSize="16"
-            fill="#8fa9cc"
-          >
-            {(i + 1) * 1000}
-          </text>
-        </g>
+        <line
+          key={i}
+          x1="64"
+          y1={78 + i * 40}
+          x2="80"
+          y2={78 + i * 40}
+          stroke="rgba(56,189,248,0.45)"
+        />
+      ))}
+      {answers.map((a) => (
+        <rect
+          key={a.y}
+          x="104"
+          y={a.y - 7}
+          width={a.w}
+          height="14"
+          fill="#38bdf8"
+          opacity={a.o}
+        />
       ))}
       <line
-        x1="230"
-        y1="30"
-        x2="230"
-        y2="200"
+        x1="232"
+        y1="40"
+        x2="232"
+        y2="214"
         stroke="#38bdf8"
         strokeWidth="2"
         strokeDasharray="2 7"
       />
       <circle
-        cx="230"
-        cy="222"
+        cx="232"
+        cy="236"
         r="44"
         fill="none"
         stroke="#38bdf8"
         opacity="0.18"
       />
       <circle
-        cx="230"
-        cy="222"
+        cx="232"
+        cy="236"
         r="26"
         fill="none"
         stroke="#38bdf8"
-        opacity="0.35"
+        opacity="0.38"
       />
       <rect
-        x="219"
-        y="211"
+        x="221"
+        y="225"
         width="22"
         height="22"
-        fill="#38bdf8"
-        transform="rotate(45 230 222)"
+        fill="#e8f1ff"
+        transform="rotate(45 232 236)"
       />
     </>
   );
 }
 
-/** Size It Up: two silhouettes on one baseline, the red one being resized. */
+/** In Scala: the reference on the baseline, and the target being resized. */
 function SizeItUpArt() {
   return (
     <>
-      <Grid step={20} stroke="rgba(207,180,156,0.4)" />
-      <path d="M100 255 h28 l-6 -100 l-8 -16 l-8 16z" fill="#1e3a8a" />
-      <line
-        x1="140"
-        y1="139"
-        x2="140"
-        y2="255"
-        stroke="#1e3a8a"
-        strokeDasharray="4 4"
+      <Grid step={20} stroke="rgba(185,169,144,0.1)" />
+      {/* Reference: a person, to scale with the lighthouse beside it. */}
+      <g fill="#93a9f0">
+        <circle cx="122" cy="183" r="11" />
+        <path d="M107 199 h30 l-4 36 h-4 l-1 20 h-12 l-1 -20 h-4z" />
+      </g>
+      {/* Target, with its previous size as a ghost: the scale is moving. */}
+      <path
+        d="M236 255 h36 l-6 -70 h-24z M242 185 v-11 h18 v11z M239 174 l12 -12 l12 12z"
+        fill="none"
+        stroke="#f2765c"
+        strokeOpacity="0.4"
+        strokeWidth="2"
+        strokeDasharray="5 5"
       />
       <path
-        d="M222 255 h56 l-10 -138 h-36z M236 117 v-18 h28 v18z M232 99 l18 -18 l18 18z"
-        fill="#ab341f"
+        d="M220 255 h68 l-10 -118 h-48z M231 137 v-18 h46 v18z M226 119 l28 -26 l28 26z"
+        fill="#f2765c"
       />
       <circle
-        cx="282"
-        cy="84"
-        r="9"
-        fill="#ab341f"
-        stroke="#fff8ef"
-        strokeWidth="3"
+        cx="296"
+        cy="100"
+        r="10"
+        fill="#f2765c"
+        stroke="#1f1a14"
+        strokeWidth="4"
+      />
+      <path
+        d="M322 112 v-34 m-7 7 l7 -7 l7 7"
+        fill="none"
+        stroke="#f2e8d7"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <line
         x1="0"
         y1="255"
         x2="400"
         y2="255"
-        stroke="#1e3a8a"
+        stroke="#93a9f0"
         strokeWidth="3"
       />
     </>

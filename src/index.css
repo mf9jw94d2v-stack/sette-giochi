@@ -41,22 +41,27 @@
   --dur-slow: 520ms;
 }
 
+/* ── Dark: the default ─────────────────────────────────────────────────────
+   A games room at night, not an inverted page: near-black warm graphite so
+   the seven covers glow, three surfaces a clear step apart (page < card <
+   raised), borders firm enough to tell controls from text, and brass kept
+   for actions only. */
 .dark {
-  --background: hsl(30 8% 7%);
-  --surface: hsl(30 7% 10%);
-  --surface-2: hsl(30 7% 14%);
-  --foreground: hsl(40 18% 94%);
-  --muted: hsl(30 6% 16%);
-  --muted-foreground: hsl(36 8% 64%);
+  --background: hsl(28 11% 5.5%);
+  --surface: hsl(28 9% 9%);
+  --surface-2: hsl(28 8% 13%);
+  --foreground: hsl(40 24% 94%);
+  --muted: hsl(28 7% 14%);
+  --muted-foreground: hsl(36 10% 67%);
   --card: var(--surface);
   --card-foreground: var(--foreground);
-  --border: hsl(32 7% 20%);
-  --input: hsl(32 7% 24%);
-  --ring: hsl(40 78% 60%);
-  --primary: hsl(40 72% 58%);
-  --primary-foreground: hsl(30 12% 10%);
-  --accent: hsl(30 7% 17%);
-  --accent-foreground: hsl(40 18% 94%);
+  --border: hsl(30 8% 18%);
+  --input: hsl(32 9% 27%);
+  --ring: hsl(42 85% 62%);
+  --primary: hsl(41 78% 60%);
+  --primary-foreground: hsl(30 20% 8%);
+  --accent: hsl(28 8% 16%);
+  --accent-foreground: hsl(40 24% 94%);
   --destructive: hsl(6 62% 52%);
   --destructive-foreground: hsl(40 30% 98%);
   --destructive-text: hsl(6 88% 74%);

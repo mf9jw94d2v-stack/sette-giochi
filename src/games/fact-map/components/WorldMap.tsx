@@ -13,13 +13,16 @@ import {
   fitWorld,
   frame,
   playView,
-  px,
-  py,
+  project,
   screenToLonLat,
   zoomAt,
   type SafeArea,
   type View,
 } from "../geo";
+import { graticulePath, outlinePath } from "../projection";
+
+const OUTLINE = outlinePath();
+const GRATICULE = graticulePath(30);
 
 /** Movement (px) past which a press becomes a pan instead of a pin. */
 const DRAG_THRESHOLD = 5;
@@ -48,12 +51,15 @@ export interface MapFocus {
  */
 export function WorldMap({
   landPath,
+  bordersPath,
   focus,
   onPick,
   label,
   children,
 }: {
   landPath: string | null;
+  /** Country borders, drawn once each, under the coastline. */
+  bordersPath?: string | null;
   focus: MapFocus;
   /** Null when the map should not accept a pin (during a reveal). */
   onPick: ((lon: number, lat: number) => void) | null;
@@ -258,22 +264,28 @@ export function WorldMap({
         onFocus={(e) => setKeyboard(e.currentTarget.matches(":focus-visible"))}
         onBlur={() => setKeyboard(false)}
       >
+        {/* Outside the world's outline: the margin of the sheet. */}
         <rect
           x={view.x - 10}
           y={view.y - 10}
           width={view.w + 20}
           height={view.h + 20}
-          fill="var(--fm-ocean)"
+          fill="var(--fm-void)"
         />
-        {/* Graticule every 30°: the quiet grid of a printed atlas. */}
-        <g stroke="var(--fm-ocean-line)" strokeWidth={u} fill="none">
-          {Array.from({ length: 13 }, (_, i) => (
-            <line key={`m${i}`} x1={i * 30} y1={0} x2={i * 30} y2={180} />
-          ))}
-          {Array.from({ length: 7 }, (_, i) => (
-            <line key={`p${i}`} x1={0} y1={i * 30} x2={360} y2={i * 30} />
-          ))}
-        </g>
+        <path
+          d={OUTLINE}
+          fill="var(--fm-ocean)"
+          stroke="var(--fm-coast)"
+          strokeWidth={u}
+        />
+        {/* Graticule every 30°, curved with the projection: the quiet grid
+            of a printed atlas. */}
+        <path
+          d={GRATICULE}
+          stroke="var(--fm-ocean-line)"
+          strokeWidth={u}
+          fill="none"
+        />
         {landPath && (
           <path
             d={landPath}
@@ -281,6 +293,16 @@ export function WorldMap({
             stroke="var(--fm-coast)"
             strokeWidth={u * 0.9}
             strokeLinejoin="round"
+          />
+        )}
+        {bordersPath && (
+          <path
+            d={bordersPath}
+            fill="none"
+            stroke="var(--fm-border)"
+            strokeWidth={u * 0.7}
+            strokeLinejoin="round"
+            strokeLinecap="round"
           />
         )}
         {children?.(u)}
@@ -346,8 +368,7 @@ export function Pin({
   color: string;
   label?: string;
 }) {
-  const x = px(lon);
-  const y = py(lat);
+  const [x, y] = project(lon, lat);
   const s = u * 15;
   return (
     <g className="fm-pin">

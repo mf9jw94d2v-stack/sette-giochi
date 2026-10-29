@@ -43,7 +43,11 @@
           var prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)",
           ).matches;
-          var dark = stored === "dark" || (stored !== "light" && prefersDark);
+          // Dark unless the player chose light, or chose to follow a light system.
+          var dark =
+            stored === "dark" ||
+            (stored !== "light" && stored !== "system") ||
+            (stored === "system" && prefersDark);
           document.documentElement.classList.toggle("dark", dark);
         } catch (_) {}
       })();

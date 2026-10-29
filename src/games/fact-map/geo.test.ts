@@ -9,13 +9,15 @@ import {
   MIN_VIEW_W,
   screenToLonLat,
   zoomAt,
+  project,
+  WORLD_H,
 } from "./geo";
 import { haversineKm } from "./engine";
 
 describe("fitWorld", () => {
-  it("shows the whole height on a screen wider than the 2:1 world", () => {
+  it("shows the whole height on a screen wider than the world's shape", () => {
     const v = fitWorld(2.6);
-    expect(v.h).toBe(180);
+    expect(v.h).toBeCloseTo(WORLD_H, 9);
     expect(v.w / v.h).toBeCloseTo(2.6, 9);
     expect(v.x).toBeLessThan(0);
   });
@@ -37,9 +39,10 @@ describe("playView", () => {
   });
   it("fills a phone's height with the inhabited latitudes", () => {
     const v = playView(0.5);
-    expect(v.h).toBeCloseTo(128, 6);
+    // From 72°N to 56°S, in projected units.
+    expect(v.h).toBeCloseTo(project(0, -56)[1] - project(0, 72)[1], 6);
     expect(v.y).toBeGreaterThanOrEqual(0);
-    expect(v.y + v.h).toBeLessThanOrEqual(180);
+    expect(v.y + v.h).toBeLessThanOrEqual(WORLD_H);
   });
 });
 
@@ -89,10 +92,11 @@ describe("frame", () => {
     ];
     const v = frame(pts, 1.6);
     for (const [lon, lat] of pts) {
-      expect(lon + 180).toBeGreaterThan(v.x);
-      expect(lon + 180).toBeLessThan(v.x + v.w);
-      expect(90 - lat).toBeGreaterThan(v.y);
-      expect(90 - lat).toBeLessThan(v.y + v.h);
+      const [x, y] = project(lon, lat);
+      expect(x).toBeGreaterThan(v.x);
+      expect(x).toBeLessThan(v.x + v.w);
+      expect(y).toBeGreaterThan(v.y);
+      expect(y).toBeLessThan(v.y + v.h);
     }
   });
 });

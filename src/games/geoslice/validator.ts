@@ -31,9 +31,10 @@ export function validateRegion(r: GeoLevelData): ValidationResult {
 
 /** Independent check: a reasonably balanced cut actually exists (solvable). */
 export function verifyRegion(r: GeoLevelData): ValidationResult {
+  // Any angle is open to the player, so search them: every 5°, every 1 %.
   let best = 100;
-  for (const theta of [0, 45, 90, 135]) {
-    for (let pos = 0; pos <= 100; pos += 2) {
+  for (let theta = 0; theta < 180; theta += 5) {
+    for (let pos = 0; pos <= 100; pos += 1) {
       const { pctA } = scoreCut(r.cities, theta, pos);
       best = Math.min(best, Math.abs(pctA - 50));
     }

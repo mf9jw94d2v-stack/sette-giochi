@@ -143,12 +143,55 @@ export function SliceField({
   const poly = (pts: [number, number][]) =>
     pts.map((p) => p.join(",")).join(" ");
   const maxPop = Math.max(...cities.map((c) => c.pop));
-  const labelled = new Set(
-    [...cities]
-      .sort((x, y) => y.pop - x.pop)
-      .slice(0, compact ? 0 : cities.length)
-      .map((c) => c.name),
-  );
+  // Labels, biggest cities first. Each goes right of its dot, or left if
+  // that is taken; a label that would cover another name or another city is
+  // left out. Real geography puts Tokyo, Kawasaki and Yokohama side by side,
+  // and three names on top of each other read as none.
+  const fontSize = Math.max(2.2, s(11));
+  const radius = (c: (typeof cities)[number]) =>
+    0.9 + Math.sqrt(c.pop / maxPop) * (compact ? 2.4 : 3);
+  const labels = new Map<string, { x: number; anchor: "start" | "end" }>();
+  if (!compact) {
+    type Box = [number, number, number, number];
+    const taken: Box[] = cities.map((c) => {
+      const r = radius(c);
+      return [c.x - r, c.y - r, c.x + r, c.y + r];
+    });
+    const overlaps = (b: Box, ignore: number) =>
+      taken.some(
+        (t, i) =>
+          i !== ignore &&
+          b[0] < t[2] &&
+          b[2] > t[0] &&
+          b[1] < t[3] &&
+          b[3] > t[1],
+      );
+    const order = cities
+      .map((c, i) => ({ c, i }))
+      .sort((a, b) => b.c.pop - a.c.pop);
+    for (const { c, i } of order) {
+      const r = radius(c);
+      const w = c.name.length * fontSize * 0.56;
+      const y0 = c.y - fontSize * 0.75;
+      const y1 = c.y + fontSize * 0.45;
+      const right: Box = [c.x + r + 1, y0, c.x + r + 1 + w, y1];
+      const left: Box = [c.x - r - 1 - w, y0, c.x - r - 1, y1];
+      const pick = !overlaps(right, i)
+        ? right
+        : !overlaps(left, i)
+          ? left
+          : null;
+      if (!pick) continue;
+      taken.push(pick);
+      labels.set(
+        c.name,
+        pick === right
+          ? { x: right[0], anchor: "start" }
+          : { x: left[2], anchor: "end" },
+      );
+    }
+  }
+  const clipId = `gs-land-${region.id}-${compact ? "s" : "l"}`;
 
   const handles = [1, -1].map((k) => ({
     x: line.px + line.dx * HANDLE_R * k,
@@ -201,12 +244,21 @@ export function SliceField({
           height={vb.h}
           fill={`url(#gs-grid-${compact ? "s" : "l"})`}
         />
-        {[0, 25, 50, 75, 100].map((g) => (
-          <g key={g} stroke="var(--gs-grid-major)" strokeWidth={s(1)}>
-            <line x1={g} y1={vb.y} x2={g} y2={vb.y + vb.h} />
-            <line x1={vb.x} y1={g} x2={vb.x + vb.w} y2={g} />
-          </g>
-        ))}
+        {/* The country itself: real outline, the territory being cut. */}
+        {region.outline && (
+          <>
+            <clipPath id={clipId}>
+              <path d={region.outline} />
+            </clipPath>
+            <path
+              d={region.outline}
+              fill="var(--gs-land)"
+              stroke="var(--gs-coast)"
+              strokeWidth={s(1.2)}
+              strokeLinejoin="round"
+            />
+          </>
+        )}
         {/* Corner ticks frame the analysed area. */}
         {!compact &&
           (
@@ -227,16 +279,19 @@ export function SliceField({
           ))}
 
         {showSplit && (
-          <g className="gs-tint">
+          <g
+            className="gs-tint"
+            clipPath={region.outline ? `url(#${clipId})` : undefined}
+          >
             <polygon
               points={poly(halfPlane(line, "a", viewBox))}
               fill="var(--gs-a)"
-              opacity={0.1}
+              opacity={0.16}
             />
             <polygon
               points={poly(halfPlane(line, "b", viewBox))}
               fill="var(--gs-b)"
-              opacity={0.1}
+              opacity={0.16}
             />
           </g>
         )}
@@ -248,8 +303,7 @@ export function SliceField({
             : sideA
               ? "var(--gs-a)"
               : "var(--gs-b)";
-          const k = Math.sqrt(c.pop / maxPop);
-          const core = 0.9 + k * (compact ? 2.4 : 3);
+          const core = radius(c);
           return (
             <g key={c.name}>
               {/* Halo ∝ population: the density the cut has to balance. */}
@@ -268,23 +322,31 @@ export function SliceField({
                 stroke="var(--gs-field)"
                 strokeWidth={s(1.5)}
               />
-              {labelled.has(c.name) && (
-                <text
-                  x={c.x + core + 1.2}
-                  y={c.y + 0.9}
-                  fontSize={Math.max(2.2, s(11))}
-                  fill="var(--gs-muted)"
-                  style={{
-                    pointerEvents: "none",
-                    fontFamily: "Inter, sans-serif",
-                  }}
-                >
-                  {c.name}
-                </text>
-              )}
             </g>
           );
         })}
+
+        {/* Names on top of every dot, so no city hides another's name. */}
+        <g style={{ pointerEvents: "none", fontFamily: "Inter, sans-serif" }}>
+          {cities.map((c) => {
+            const l = labels.get(c.name);
+            return l ? (
+              <text
+                key={c.name}
+                x={l.x}
+                y={c.y + fontSize * 0.35}
+                textAnchor={l.anchor}
+                fontSize={fontSize}
+                fill="var(--gs-text)"
+                stroke="var(--gs-field)"
+                strokeWidth={fontSize * 0.28}
+                paintOrder="stroke"
+              >
+                {c.name}
+              </text>
+            ) : null;
+          })}
+        </g>
 
         {!dim && (
           <>

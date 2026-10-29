@@ -19,6 +19,8 @@
   --gs-ok: #a3e635;
   --gs-radius: 2px;
   --gs-cut-hi: #ffffff;
+  --gs-land: #111b2f;
+  --gs-coast: #3a4b6b;
   --gs-hover: rgba(148, 163, 184, 0.08);
   --gs-backdrop: rgba(2, 6, 14, 0.7);
 
@@ -215,6 +217,8 @@
   --gs-cut: #0f172a;
   --gs-ok: #3f6212;
   --gs-cut-hi: #1e293b;
+  --gs-land: #e6ebf2;
+  --gs-coast: #94a3b8;
   --gs-hover: rgba(15, 23, 42, 0.05);
   --gs-backdrop: rgba(15, 23, 42, 0.4);
 

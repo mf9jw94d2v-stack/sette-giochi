@@ -2,6 +2,31 @@
 
 Reverse-chronological log of real, verified increments.
 
+## 2026-10-29 (4) — Piattaforma scura, nuove anteprime, mappe e sagome vere
+
+- **Tema scuro predefinito** per tutti (il chiaro resta nelle impostazioni),
+  con toni ripensati: tre superfici distinte, bordi più netti, ottone solo
+  per le azioni.
+- **Anteprime dei sette giochi** ridisegnate su fondo scuro, ognuna con un
+  solo disegno che racconta la meccanica; quelle di Atlante e Taglio usano la
+  geografia vera.
+- **Atlante**: Natural Earth 1:50m (prima 1:110m e solo contorni esterni),
+  confini tra paesi, isole fino a ~20 km², proiezione Equal Earth (verificata
+  contro d3-geo, inversa esatta) al posto di quella piatta.
+- **Taglio**: posizioni e popolazioni reali (Natural Earth populated places),
+  contorno vero del paese, metà colorate solo sulla terraferma, etichette che
+  non si coprono. Nuova versione del generatore `geoslice-2.0.0`. Grecia e
+  Argentina escluse (una città supera metà del totale); dove una metropoli
+  pesava troppo sono state aggiunte città reali successive.
+- **In Scala**: 22 sagome ridisegnate in metri con geometria booleana esatta
+  (niente più buchi da sovrapposizione), riquadro calcolato; la Torre di Pisa
+  pende davvero e il riquadro si ferma al lato basso misurato.
+
+**Verifiche:** typecheck, lint, formattazione, 289 unit, 191 e2e (axe
+compreso), bundle delle funzioni, report di qualità riproducibile;
+screenshot di copertine, Atlante, Taglio e In Scala, nei due temi, desktop e
+mobile.
+
 ## 2026-10-29 (3) — Nomi propri, condivisione, anteprime, app installabile
 
 - **Nomi propri** per i sette giochi (prima usavano i nomi degli originali):

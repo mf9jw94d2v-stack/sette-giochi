@@ -1,0 +1,370 @@
+{
+  "_comment": "Taglio's regions: for each, the Natural Earth country (ISO A2 and ISO numeric) and its cities, as 'Italian name' -> 'Natural Earth name'. Every city must exist in Natural Earth's populated places: scripts/geo/build-geoslice.mjs refuses to build otherwise. Cities outside the country's Natural Earth borders, or on islands far from the mainland, are left out on purpose.",
+  "regions": [
+    {
+      "id": "italia",
+      "name": "Italia",
+      "iso": "IT",
+      "num": "380",
+      "cities": {
+        "Roma": "Rome",
+        "Milano": "Milan",
+        "Napoli": "Naples",
+        "Torino": "Turin",
+        "Palermo": "Palermo",
+        "Genova": "Genoa",
+        "Bologna": "Bologna",
+        "Firenze": "Florence",
+        "Bari": "Bari",
+        "Venezia": "Venice"
+      }
+    },
+    {
+      "id": "francia",
+      "name": "Francia",
+      "iso": "FR",
+      "num": "250",
+      "cities": {
+        "Parigi": "Paris",
+        "Marsiglia": "Marseille",
+        "Lione": "Lyon",
+        "Tolosa": "Toulouse",
+        "Nizza": "Nice",
+        "Nantes": "Nantes",
+        "Strasburgo": "Strasbourg",
+        "Bordeaux": "Bordeaux",
+        "Lille": "Lille",
+        "Rennes": "Rennes"
+      }
+    },
+    {
+      "id": "spagna",
+      "name": "Spagna",
+      "iso": "ES",
+      "num": "724",
+      "cities": {
+        "Madrid": "Madrid",
+        "Barcellona": "Barcelona",
+        "Valencia": "Valencia",
+        "Siviglia": "Seville",
+        "Saragozza": "Zaragoza",
+        "Málaga": "Malaga",
+        "Murcia": "Murcia",
+        "Palma": "Palma",
+        "Bilbao": "Bilbao",
+        "Vigo": "Vigo"
+      }
+    },
+    {
+      "id": "germania",
+      "name": "Germania",
+      "iso": "DE",
+      "num": "276",
+      "cities": {
+        "Berlino": "Berlin",
+        "Amburgo": "Hamburg",
+        "Monaco": "Munich",
+        "Colonia": "Cologne",
+        "Francoforte": "Frankfurt",
+        "Stoccarda": "Stuttgart",
+        "Düsseldorf": "Dusseldorf",
+        "Lipsia": "Leipzig",
+        "Dortmund": "Dortmund",
+        "Brema": "Bremen"
+      }
+    },
+    {
+      "id": "regno-unito",
+      "name": "Regno Unito",
+      "iso": "GB",
+      "num": "826",
+      "cities": {
+        "Londra": "London",
+        "Manchester": "Manchester",
+        "Birmingham": "Birmingham",
+        "Leeds": "Leeds",
+        "Glasgow": "Glasgow",
+        "Liverpool": "Liverpool",
+        "Bristol": "Bristol",
+        "Belfast": "Belfast",
+        "Edimburgo": "Edinburgh",
+        "Cardiff": "Cardiff"
+      }
+    },
+    {
+      "id": "giappone",
+      "name": "Giappone",
+      "iso": "JP",
+      "num": "392",
+      "cities": {
+        "Tokyo": "Tokyo",
+        "Yokohama": "Yokohama",
+        "Osaka": "Osaka",
+        "Nagoya": "Nagoya",
+        "Sapporo": "Sapporo",
+        "Fukuoka": "Fukuoka",
+        "Kobe": "Kobe",
+        "Kawasaki": "Kawasaki",
+        "Kyoto": "Kyoto",
+        "Hiroshima": "Hiroshima"
+      }
+    },
+    {
+      "id": "polonia",
+      "name": "Polonia",
+      "iso": "PL",
+      "num": "616",
+      "cities": {
+        "Varsavia": "Warsaw",
+        "Cracovia": "Krakow",
+        "Łódź": "Lodz",
+        "Breslavia": "Wroclaw",
+        "Poznań": "Poznan",
+        "Danzica": "Gdansk",
+        "Stettino": "Szczecin",
+        "Bydgoszcz": "Bydgoszcz",
+        "Lublino": "Lublin",
+        "Katowice": "Katowice"
+      }
+    },
+    {
+      "id": "paesi-bassi",
+      "name": "Paesi Bassi",
+      "iso": "NL",
+      "num": "528",
+      "cities": {
+        "Amsterdam": "Amsterdam",
+        "Rotterdam": "Rotterdam",
+        "L'Aia": "The Hague",
+        "Utrecht": "Utrecht",
+        "Eindhoven": "Eindhoven",
+        "Groninga": "Groningen",
+        "Haarlem": "Haarlem",
+        "Arnhem": "Arnhem",
+        "'s-Hertogenbosch": "'s-Hertogenbosch",
+        "Maastricht": "Maastricht"
+      }
+    },
+    {
+      "id": "portogallo",
+      "name": "Portogallo",
+      "iso": "PT",
+      "num": "620",
+      "cities": {
+        "Lisbona": "Lisbon",
+        "Porto": "Porto",
+        "Braga": "Braga",
+        "Coimbra": "Coimbra",
+        "Setúbal": "Setubal",
+        "Faro": "Faro",
+        "Aveiro": "Aveiro",
+        "Leiria": "Leiria",
+        "Évora": "Evora",
+        "Viseu": "Viseu"
+      }
+    },
+    {
+      "id": "grecia",
+      "name": "Grecia",
+      "iso": "GR",
+      "num": "300",
+      "cities": {
+        "Atene": "Athens",
+        "Salonicco": "Thessaloniki",
+        "Patrasso": "Patra",
+        "Larissa": "Larissa",
+        "Candia": "Iraklio",
+        "Volos": "Volos",
+        "Ioannina": "Ioanina",
+        "Chania": "Hania",
+        "Kavala": "Kavala",
+        "Rodi": "Rodos"
+      }
+    },
+    {
+      "id": "svezia",
+      "name": "Svezia",
+      "iso": "SE",
+      "num": "752",
+      "cities": {
+        "Stoccolma": "Stockholm",
+        "Göteborg": "Goteborg",
+        "Malmö": "Malmo",
+        "Uppsala": "Uppsala",
+        "Västerås": "Vasteras",
+        "Örebro": "Orebro",
+        "Linköping": "Linkoping",
+        "Helsingborg": "Helsingborg",
+        "Umeå": "Umea",
+        "Luleå": "Lulea"
+      }
+    },
+    {
+      "id": "turchia",
+      "name": "Turchia",
+      "iso": "TR",
+      "num": "792",
+      "cities": {
+        "Istanbul": "Istanbul",
+        "Ankara": "Ankara",
+        "Smirne": "Izmir",
+        "Bursa": "Bursa",
+        "Adana": "Adana",
+        "Gaziantep": "Gaziantep",
+        "Konya": "Konya",
+        "Antalya": "Antalya",
+        "Diyarbakır": "Diyarbakir",
+        "Trebisonda": "Trabzon"
+      }
+    },
+    {
+      "id": "messico",
+      "name": "Messico",
+      "iso": "MX",
+      "num": "484",
+      "cities": {
+        "Città del Messico": "Mexico City",
+        "Tijuana": "Tijuana",
+        "Puebla": "Puebla",
+        "León": "Leon",
+        "Guadalajara": "Guadalajara",
+        "Monterrey": "Monterrey",
+        "Mérida": "Merida",
+        "Hermosillo": "Hermosillo",
+        "Cancún": "Cancun",
+        "Oaxaca": "Oaxaca"
+      }
+    },
+    {
+      "id": "argentina",
+      "name": "Argentina",
+      "iso": "AR",
+      "num": "032",
+      "cities": {
+        "Buenos Aires": "Buenos Aires",
+        "Córdoba": "Cordoba",
+        "Rosario": "Rosario",
+        "Tucumán": "San Miguel de Tucuman",
+        "La Plata": "La Plata",
+        "Mar del Plata": "Mar del Plata",
+        "Salta": "Salta",
+        "Neuquén": "Neuquen",
+        "Mendoza": "Mendoza",
+        "Ushuaia": "Ushuaia"
+      }
+    },
+    {
+      "id": "australia",
+      "name": "Australia",
+      "iso": "AU",
+      "num": "036",
+      "cities": {
+        "Sydney": "Sydney",
+        "Melbourne": "Melbourne",
+        "Brisbane": "Brisbane",
+        "Perth": "Perth",
+        "Adelaide": "Adelaide",
+        "Canberra": "Canberra",
+        "Hobart": "Hobart",
+        "Cairns": "Cairns",
+        "Darwin": "Darwin",
+        "Alice Springs": "Alice Springs"
+      }
+    },
+    {
+      "id": "india",
+      "name": "India",
+      "iso": "IN",
+      "num": "356",
+      "cities": {
+        "Delhi": "Delhi",
+        "Mumbai": "Mumbai",
+        "Bangalore": "Bengaluru",
+        "Hyderabad": "Hyderabad",
+        "Ahmedabad": "Ahmedabad",
+        "Chennai": "Chennai",
+        "Calcutta": "Kolkata",
+        "Pune": "Pune",
+        "Jaipur": "Jaipur",
+        "Lucknow": "Lucknow"
+      }
+    },
+    {
+      "id": "canada",
+      "name": "Canada",
+      "iso": "CA",
+      "num": "124",
+      "cities": {
+        "Toronto": "Toronto",
+        "Montréal": "Montreal",
+        "Calgary": "Calgary",
+        "Ottawa": "Ottawa",
+        "Edmonton": "Edmonton",
+        "Winnipeg": "Winnipeg",
+        "Vancouver": "Vancouver",
+        "Hamilton": "Hamilton",
+        "Québec": "Quebec",
+        "Halifax": "Halifax",
+        "London": "London",
+        "Saskatoon": "Saskatoon",
+        "Regina": "Regina",
+        "Yellowknife": "Yellowknife"
+      }
+    },
+    {
+      "id": "brasile",
+      "name": "Brasile",
+      "iso": "BR",
+      "num": "076",
+      "cities": {
+        "San Paolo": "Sao Paulo",
+        "Rio de Janeiro": "Rio de Janeiro",
+        "Brasília": "Brasilia",
+        "Salvador": "Salvador",
+        "Fortaleza": "Fortaleza",
+        "Belo Horizonte": "Belo Horizonte",
+        "Manaus": "Manaus",
+        "Curitiba": "Curitiba",
+        "Recife": "Recife",
+        "Porto Alegre": "Porto Alegre"
+      }
+    },
+    {
+      "id": "marocco",
+      "name": "Marocco",
+      "iso": "MA",
+      "num": "504",
+      "cities": {
+        "Casablanca": "Casablanca",
+        "Fès": "Fes",
+        "Tangeri": "Tangier",
+        "Marrakech": "Marrakesh",
+        "Meknes": "Meknes",
+        "Rabat": "Rabat",
+        "Oujda": "Oujda",
+        "Kenitra": "Kenitra",
+        "Agadir": "Agadir",
+        "Safi": "Safi",
+        "El Jadida": "El Jadida"
+      }
+    },
+    {
+      "id": "corea-del-sud",
+      "name": "Corea del Sud",
+      "iso": "KR",
+      "num": "410",
+      "cities": {
+        "Seul": "Seoul",
+        "Busan": "Busan",
+        "Incheon": "Incheon",
+        "Daegu": "Daegu",
+        "Daejeon": "Daejeon",
+        "Gwangju": "Gwangju",
+        "Suwon": "Suwon",
+        "Ulsan": "Ulsan",
+        "Jeonju": "Jeonju",
+        "Jeju": "Jeju"
+      }
+    }
+  ]
+}

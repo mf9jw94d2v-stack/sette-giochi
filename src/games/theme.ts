@@ -4,7 +4,9 @@ import type { GameId } from "@/types/game";
  * Each game's identity as the PLATFORM shows it: on the home page, the
  * catalogue, the daily scoreboard, the archive and the statistics.
  *
- * These values are copied from the games' own design systems
+ * Covers always use each game's NIGHT palette (the platform is dark first),
+ * so the seven sit together as lit panels on the same table. These values
+ * are copied from the games' own design systems
  * (`src/games/<game>/<game>.css`, described in docs/game-identities.md), so a
  * game looks the same outside its page as inside it. The covers in
  * `src/components/games/GameCover.tsx` are drawn from them.
@@ -57,28 +59,28 @@ export const GAME_THEMES: Record<GameId, GameTheme> = {
     mechanic: "Stima di prossimità",
   },
   "fact-map": {
-    from: "#d9e2e8",
-    to: "#cfd9e0",
-    fg: "#2b2722",
-    accent: "#c2410c",
+    from: "#0e1a24",
+    to: "#09131b",
+    fg: "#ece6d9",
+    accent: "#f97316",
     font: "Outfit, Inter, system-ui, sans-serif",
     nameStyle: { fontWeight: 600, letterSpacing: "-0.02em" },
     mechanic: "Geografia sulla mappa",
   },
   estimania: {
-    from: "#f7f5f0",
-    to: "#efeae0",
-    fg: "#1c1917",
-    accent: "#0d9488",
+    from: "#1d1a14",
+    to: "#13110d",
+    fg: "#f1ebdf",
+    accent: "#2dd4bf",
     font: "Fraunces, Georgia, serif",
     nameStyle: { fontWeight: 600, letterSpacing: "-0.02em" },
     mechanic: "Stima numerica",
   },
   "size-it-up": {
-    from: "#fff8ef",
-    to: "#fffaf4",
-    fg: "#3a2f1c",
-    accent: "#ab341f",
+    from: "#1f1a14",
+    to: "#16120e",
+    fg: "#f2e8d7",
+    accent: "#f2765c",
     font: "Archivo, Inter, system-ui, sans-serif",
     nameStyle: {
       fontWeight: 800,

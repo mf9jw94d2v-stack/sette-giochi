@@ -8,6 +8,8 @@
   --fm-ocean-line: rgba(43, 39, 34, 0.07);
   --fm-land: #ebe2cf;
   --fm-coast: #a3957a;
+  --fm-border: rgba(110, 96, 74, 0.55);
+  --fm-void: #c9d3da;
   --fm-panel: rgba(250, 247, 240, 0.94);
   --fm-paper: #faf7f0;
   --fm-ink: #2b2722;
@@ -204,6 +206,8 @@
   --fm-ocean-line: rgba(236, 230, 217, 0.07);
   --fm-land: #2a2f28;
   --fm-coast: #7a8571;
+  --fm-border: rgba(170, 180, 160, 0.38);
+  --fm-void: #081118;
   --fm-panel: rgba(20, 24, 28, 0.94);
   --fm-paper: #171b1f;
   --fm-ink: #ece6d9;

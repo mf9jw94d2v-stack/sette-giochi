@@ -24,7 +24,7 @@ import {
   type FactSessionData,
 } from "./engine";
 import { factGenerator } from "./generator";
-import { greatCircle, pathOf, px, py } from "./geo";
+import { greatCircle, pathOf } from "./geo";
 import type { FactGuess, FactLevelData, FactState } from "./types";
 import { Pin, WorldMap, type MapFocus } from "./components/WorldMap";
 import "./fact-map.css";
@@ -93,7 +93,9 @@ export function FactMapGame({
   const [reveal, setReveal] = useState<Reveal | null>(null);
   const [guess, setGuess] = useState<FactGuess | null>(null);
   const [hintUsed, setHintUsed] = useState(false);
-  const [rings, setRings] = useState<[number, number][][] | null>(null);
+  const [world, setWorld] = useState<{ land: string; borders: string } | null>(
+    null,
+  );
   const [rulesOpen, setRulesOpen] = useState(false);
   const [muted, toggleMute] = useMute();
   const lock = useDailyLock("fact-map", mode, dailyDate);
@@ -115,28 +117,19 @@ export function FactMapGame({
     if (lock.alreadyPlayed) setPhase("finished");
   }, [lock.alreadyPlayed]);
 
-  // The world geometry (~127 KB) loads only when this game is opened.
+  // The world geometry (Natural Earth 1:50m, ~100 KB compressed) loads only
+  // when this game is opened.
   useEffect(() => {
     let active = true;
     void import("./data/world").then((m) => {
-      if (active) setRings(m.WORLD_RINGS);
+      if (active) setWorld({ land: m.LAND_PATH, borders: m.BORDERS_PATH });
     });
     return () => {
       active = false;
     };
   }, []);
-
-  const landPath = useMemo(() => {
-    if (!rings) return null;
-    let d = "";
-    for (const ring of rings) {
-      ring.forEach(([lon, lat], i) => {
-        d += `${i ? "L" : "M"}${px(lon).toFixed(1)} ${py(lat).toFixed(1)} `;
-      });
-      d += "Z";
-    }
-    return d;
-  }, [rings]);
+  const landPath = world?.land ?? null;
+  const bordersPath = world?.borders ?? null;
 
   useEffect(() => {
     setGuess(null);
@@ -230,6 +223,7 @@ export function FactMapGame({
     <div className="fm game-viewport-fixed relative overflow-hidden">
       <WorldMap
         landPath={landPath}
+        bordersPath={bordersPath}
         focus={focus}
         label={
           phase === "playing" && !reveal
