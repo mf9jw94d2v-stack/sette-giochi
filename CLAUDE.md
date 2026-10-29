@@ -29,8 +29,17 @@ Optional Supabase backend (Postgres + Auth + 2 Edge Functions). Without
 
 `npm run typecheck` · `npm run lint` · `npm run format:check` · `npm test` ·
 `npm run functions:check` · `npm run build` · `npm run test:e2e`
-(run `pkill -f "vite preview"` first). After changing `src/backend`,
-`src/games/**/engine|generator|answers` or `replay.ts`: `npm run functions:build`.
+(run `pkill -f "vite preview"` first; includes axe accessibility checks).
+After changing `src/backend`, `src/games/**/engine|generator|answers` or
+`replay.ts`: `npm run functions:build`. Preview images:
+`node scripts/og/capture.mjs`; icons: `node scripts/og/icons.mjs`.
+
+## Publishing
+
+GitHub repo `mf9jw94d2v-stack/sette-giochi`, branch `main` → GitHub Pages
+(`.github/workflows/pages.yml`). Work on `main`; local `master` keeps the
+private history with third-party captures and must never be pushed. Push to
+`main` only when the user asks for changes to go online.
 
 ## Rules
 
@@ -50,6 +59,14 @@ Optional Supabase backend (Postgres + Auth + 2 Edge Functions). Without
 - Commit messages end with: `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 
 ## The seven identities (keep them distinct)
+
+Public names (UI, URLs) differ from the internal ids, which never change
+(they key stored results, the database and the generators):
+krillion → Abissi `/games/abissi` · plain → Quota `/games/quota` ·
+fact-map → Atlante `/games/atlante` · estimania → Stima `/games/stima` ·
+size-it-up → In Scala `/games/in-scala` · geoslice → Taglio `/games/taglio` ·
+gazillion → Epoche `/games/epoche`. Mapping in `src/games/slugs.ts`; old
+URLs redirect. Each game has a light and a dark palette (CSS variables).
 
 Krillion: deep sea, VT323, cyan on near-black · Plain: cockpit instruments,
 lime on graphite · Fact Map: atlas, Outfit, ink and rust · Estimania:

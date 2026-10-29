@@ -1,7 +1,8 @@
 # Sette Giochi
 
-Sette rompicapo quotidiani in un'unica applicazione: Krillion, Plain, Fact
-Map, Estimania, Size It Up, GeoSlice e Gazillion. Ogni giorno ogni gioco ha
+Sette rompicapo quotidiani in un'unica applicazione: Abissi, Quota, Atlante,
+Stima, In Scala, Taglio ed Epoche. Online su
+https://mf9jw94d2v-stack.github.io/sette-giochi/ Ogni giorno ogni gioco ha
 una sfida nuova, uguale per tutti; si può rigiocare l'archivio, seguire serie
 e statistiche e, con un account, salvare i risultati sul server ed entrare
 nelle classifiche.
@@ -10,8 +11,11 @@ nelle classifiche.
 > regole, punteggio, generatore e identità visiva propri; la piattaforma unisce
 > ciò che sta intorno.
 
-I giochi sono **implementazioni originali ispirate** agli originali citati in
-`docs/game-analysis.md`. Nessun asset o dato proprietario è copiato.
+I giochi sono **implementazioni originali ispirate** a giochi esistenti,
+citati in `docs/game-analysis.md`, con nomi propri. Nessun asset o dato
+proprietario è copiato. Nel codice ogni gioco conserva un identificativo
+tecnico storico (`krillion`, `plain`, `fact-map`, `estimania`, `size-it-up`,
+`geoslice`, `gazillion`): non compare mai al giocatore.
 
 ## Stato
 

@@ -105,6 +105,20 @@ Altri host statici vanno bene uguale: servono la build `npm run build`
   `https://<utente>.github.io/<repository>/auth/callback` e
   `https://<utente>.github.io/<repository>/reset-password`.
 
+### Cosa fa la pubblicazione, oltre alla build
+
+- `scripts/build/static-pages.mjs`: una pagina HTML vera per ogni indirizzo
+  pubblico (titolo, descrizione, immagine di anteprima, indirizzo canonico),
+  `sitemap.xml`, `robots.txt`, e l'app come pagina 404 per il resto.
+- Immagini di anteprima in `public/og/` (rigenerabili con
+  `node scripts/og/capture.mjs`), icone in `public/icons/`
+  (`node scripts/og/icons.mjs`), `manifest.webmanifest` e `sw.js` per
+  installare il sito e usarlo offline.
+- `.github/workflows/keep-alive.yml`: ogni tre giorni una lettura minima del
+  database, perché i progetti Supabase gratuiti vanno in pausa dopo circa una
+  settimana senza attività. Non è una garanzia: GitHub sospende le attività
+  pianificate nei repository senza commit da 60 giorni.
+
 ## 4. Verifiche dopo la pubblicazione
 
 1. Registrati con un'email vera, apri il link di conferma: devi arrivare

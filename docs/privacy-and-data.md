@@ -11,6 +11,10 @@ del progetto, non un'intenzione.
 > propri dati, imposto dal database (RLS). Esportazione ed eliminazione
 > completa dalla pagina Account. Il resto di questo documento descrive la
 > modalità ospite, che resta invariata. Pagina per i giocatori: `/privacy`.
+>
+> Il sito installa un service worker (`public/sw.js`) che conserva nel
+> browser i file del sito per l'uso offline: codice, immagini, caratteri. Non
+> conserva dati del giocatore né risposte del server.
 
 > Nota: questo è un documento tecnico, non un'informativa privacy legale. Prima
 > di una pubblicazione reale serve una verifica legale (vedi "Decisioni che

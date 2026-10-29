@@ -2,6 +2,32 @@
 
 Reverse-chronological log of real, verified increments.
 
+## 2026-10-29 (3) — Nomi propri, condivisione, anteprime, app installabile
+
+- **Nomi propri** per i sette giochi (prima usavano i nomi degli originali):
+  Abissi, Quota, Atlante, Stima, In Scala, Taglio, Epoche, con indirizzi
+  propri; i vecchi indirizzi reindirizzano. Identificativi interni invariati.
+- **Condividi il risultato** in ogni gioco: una riga con un segno per round
+  (quanto vicino, mai la risposta), punteggio e link.
+- **Anteprime dei link** (1200×630) disegnate dalle copertine vere; una
+  pagina vera per ogni indirizzo pubblico (niente più 404 per i link
+  diretti), sitemap.
+- **App installabile e offline**: manifest, icone, service worker.
+- **Home**: immagine 4 volte più leggera a pixel identici, settima copertina
+  centrata, festa e conto alla rovescia quando completi tutte e sette.
+- **Traguardi** personali nel profilo.
+- **Accessibilità**: audit automatico axe su tutte le pagine e i giochi, nei
+  due temi e nelle pagine account; quattro problemi trovati e corretti.
+- **Supabase sveglio**: lettura pianificata ogni tre giorni.
+
+**Non fatto, e perché:** promemoria con notifiche (serve un servizio di
+notifiche push), classifiche fra amici (nuove tabelle e inviti: lavoro a
+sé), più contenuti nei giochi (cambiare i dati cambia anche i giorni
+passati: va fatto con una nuova versione dei generatori), protezione
+completa delle soluzioni, analytics ed error tracking (servono servizi
+esterni e una tua scelta), testi legali (da professionista), dominio
+proprio, email SMTP e piano Supabase a pagamento (tuoi account).
+
 ## 2026-10-29 (2) — Copertine grandi, tema chiaro e scuro nei giochi
 
 - **Home**: i giochi tornano grandi come prima del ridisegno (una colonna sul

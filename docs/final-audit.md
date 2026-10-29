@@ -86,18 +86,18 @@ Nessuna di queste è presentata come dato reale.
 
 ## 4. Interfaccia
 
-| Requisito             | Stato                     | Evidenza                                                                                                                                                                     |
-| --------------------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Homepage              | COMPLETATO E VERIFICATO   | e2e: i 7 giochi sono visibili                                                                                                                                                |
-| Navigazione           | COMPLETATO E VERIFICATO   | e2e: tutte le destinazioni raggiungibili                                                                                                                                     |
-| Responsive design     | COMPLETATO E VERIFICATO   | e2e girano anche su profilo **mobile** (Pixel 7); test esplicito di assenza di overflow orizzontale, anche sui sette giochi prima e dopo l'inizio                            |
-| Pagine di gioco       | COMPLETATO E VERIFICATO   | sette pagine a tutto schermo con identità propria (`docs/game-identities.md`); verificate nel browser a 1440×900 e 375×812 in intro, partita, rivelazione, risultati         |
-| Pagine piattaforma    | COMPLETATO E VERIFICATO   | copertine vere dei giochi e una forma per pagina (`docs/platform-design.md`); verificate a 1440×900 (scuro, chiaro in parte) e 375×812, overflow controllato su tutte        |
-| Tema chiaro           | COMPLETATO E VERIFICATO   | e2e: cambio tema + persistenza dopo reload                                                                                                                                   |
-| Tema scuro            | COMPLETATO E VERIFICATO   | idem                                                                                                                                                                         |
-| Accessibilità         | PARZIALMENTE IMPLEMENTATO | skip-link, ruoli ARIA, focus visibile, `prefers-reduced-motion`, test per ruolo. Manca un audit completo (screen reader, contrasto su tutti i giochi)                        |
-| Stati di caricamento  | COMPLETATO E VERIFICATO   | fallback su ogni rotta lazy, "Caricamento…" sulle pagine dati                                                                                                                |
-| Gestione degli errori | COMPLETATO E VERIFICATO   | 404 reale, stati vuoti espliciti, error boundary sulla pagina (`ErrorBoundary`, 4 test): un crash non lascia una pagina bianca e non viene trascinato alla pagina successiva |
+| Requisito             | Stato                                         | Evidenza                                                                                                                                                                                    |
+| --------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Homepage              | COMPLETATO E VERIFICATO                       | e2e: i 7 giochi sono visibili                                                                                                                                                               |
+| Navigazione           | COMPLETATO E VERIFICATO                       | e2e: tutte le destinazioni raggiungibili                                                                                                                                                    |
+| Responsive design     | COMPLETATO E VERIFICATO                       | e2e girano anche su profilo **mobile** (Pixel 7); test esplicito di assenza di overflow orizzontale, anche sui sette giochi prima e dopo l'inizio                                           |
+| Pagine di gioco       | COMPLETATO E VERIFICATO                       | sette pagine a tutto schermo con identità propria (`docs/game-identities.md`); verificate nel browser a 1440×900 e 375×812 in intro, partita, rivelazione, risultati                        |
+| Pagine piattaforma    | COMPLETATO E VERIFICATO                       | copertine vere dei giochi e una forma per pagina (`docs/platform-design.md`); verificate a 1440×900 (scuro, chiaro in parte) e 375×812, overflow controllato su tutte                       |
+| Tema chiaro           | COMPLETATO E VERIFICATO                       | e2e: cambio tema + persistenza dopo reload                                                                                                                                                  |
+| Tema scuro            | COMPLETATO E VERIFICATO                       | idem                                                                                                                                                                                        |
+| Accessibilità         | IMPLEMENTATO, MA NON COMPLETAMENTE VERIFICATO | audit automatico axe-core (WCAG 2.1 A/AA) su tutte le pagine, i sette giochi e le pagine account, nei due temi: 0 violazioni (`tests/e2e/a11y.spec.ts`). Non fatto: prova con screen reader |
+| Stati di caricamento  | COMPLETATO E VERIFICATO                       | fallback su ogni rotta lazy, "Caricamento…" sulle pagine dati                                                                                                                               |
+| Gestione degli errori | COMPLETATO E VERIFICATO                       | 404 reale, stati vuoti espliciti, error boundary sulla pagina (`ErrorBoundary`, 4 test): un crash non lascia una pagina bianca e non viene trascinato alla pagina successiva                |
 
 ## 5. Account
 
