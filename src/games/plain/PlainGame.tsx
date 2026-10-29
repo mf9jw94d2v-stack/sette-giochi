@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import { plainAnswers } from "./answers";
 import { Link } from "react-router-dom";
 import {
@@ -699,6 +701,23 @@ function FlightLog({
       )}
 
       <div className="mt-10 flex flex-wrap gap-3">
+        {context?.kind !== "archive" && (
+          <ShareButton
+            className="pl-btn pl-btn-text"
+            text={buildShareText({
+              gameId: "plain",
+              number:
+                mode === "daily" && dailyDate
+                  ? dailyNumber(dailyDate, EPOCH)
+                  : null,
+              // After a reload only the stored score is known, not the rounds.
+              ratios: alreadyPlayed
+                ? undefined
+                : state.rounds.map((r) => r.climb / 1000),
+              scoreText: `${altitude.toLocaleString("it-IT")} m di quota`,
+            })}
+          />
+        )}
         {mode === "practice" && onRestart && !archive && (
           <button type="button" onClick={onRestart} className="pl-btn">
             <RotateCcw className="h-4 w-4" aria-hidden="true" />

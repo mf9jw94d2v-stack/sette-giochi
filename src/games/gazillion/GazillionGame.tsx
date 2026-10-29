@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import { gazillionAnswers } from "./answers";
 import { Link } from "react-router-dom";
 import {
@@ -692,6 +694,23 @@ function Arrival({
       )}
 
       <div className="flex flex-wrap gap-3">
+        {context?.kind !== "archive" && (
+          <ShareButton
+            className="gz-btn gz-btn-ghost"
+            text={buildShareText({
+              gameId: "gazillion",
+              number:
+                mode === "daily" && dailyDate
+                  ? dailyNumber(dailyDate, EPOCH)
+                  : null,
+              // After a reload only the stored score is known, not the rounds.
+              ratios: alreadyPlayed
+                ? undefined
+                : state.rounds.map((r) => r.points / 1000),
+              scoreText: `${score.toLocaleString("it-IT")} punti su 5.000`,
+            })}
+          />
+        )}
         {mode === "practice" && onRestart && !archive && (
           <button type="button" onClick={onRestart} className="gz-btn">
             <RotateCcw className="h-4 w-4" aria-hidden="true" />

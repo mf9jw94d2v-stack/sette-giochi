@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import { geoAnswers } from "./answers";
 import { Link } from "react-router-dom";
 import {
@@ -696,6 +698,23 @@ function Totals({
         </p>
       )}
       <div className="flex flex-col gap-2">
+        {context?.kind !== "archive" && (
+          <ShareButton
+            className="gs-btn gs-btn-line w-full"
+            text={buildShareText({
+              gameId: "geoslice",
+              number:
+                mode === "daily" && dailyDate
+                  ? dailyNumber(dailyDate, EPOCH)
+                  : null,
+              // After a reload only the stored score is known, not the rounds.
+              ratios: alreadyPlayed
+                ? undefined
+                : state.rounds.map((r) => r.points / 1000),
+              scoreText: `${score.toLocaleString("it-IT")} punti su 3.000`,
+            })}
+          />
+        )}
         {mode === "practice" && onRestart && !archive && (
           <button type="button" onClick={onRestart} className="gs-btn w-full">
             <RotateCcw className="h-4 w-4" aria-hidden="true" />

@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import { factAnswers } from "./answers";
 import { Link } from "react-router-dom";
 import {
@@ -879,6 +881,23 @@ function Journal({
       )}
 
       <div className="mt-5 flex flex-wrap gap-2">
+        {context?.kind !== "archive" && (
+          <ShareButton
+            className="fm-btn fm-btn-quiet flex-1"
+            text={buildShareText({
+              gameId: "fact-map",
+              number:
+                mode === "daily" && dailyDate
+                  ? dailyNumber(dailyDate, EPOCH)
+                  : null,
+              // After a reload only the stored score is known, not the rounds.
+              ratios: alreadyPlayed
+                ? undefined
+                : state.rounds.map((r) => r.points / 1000),
+              scoreText: `${score.toLocaleString("it-IT")} punti su 5.000`,
+            })}
+          />
+        )}
         {mode === "practice" && onRestart && context?.kind !== "archive" && (
           <button type="button" onClick={onRestart} className="fm-btn flex-1">
             <RotateCcw className="h-4 w-4" aria-hidden="true" />

@@ -1,4 +1,6 @@
 import { sizeAnswers } from "./answers";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import {
   useCallback,
   useEffect,
@@ -656,6 +658,21 @@ function Gallery({
         )}
 
         <div className="mt-10 flex flex-wrap gap-3">
+          {context?.kind !== "archive" && (
+            <ShareButton
+              className="siu-btn siu-btn-ghost"
+              text={buildShareText({
+                gameId: "size-it-up",
+                number:
+                  plateNo !== null && mode === "daily" ? Number(plateNo) : null,
+                // After a reload only the stored score is known, not the rounds.
+                ratios: alreadyPlayed
+                  ? undefined
+                  : rounds.map((r) => r.points / 100),
+                scoreText: `${score.toLocaleString("it-IT")} punti su 500`,
+              })}
+            />
+          )}
           {mode === "practice" && onRestart && !archive && (
             <button type="button" onClick={onRestart} className="siu-btn">
               <RotateCcw className="h-4 w-4" aria-hidden="true" />

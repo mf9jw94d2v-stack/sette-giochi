@@ -174,3 +174,30 @@ test.describe("archive stays out of official results", () => {
     expect(await readArchive(page)).toHaveLength(0);
   });
 });
+
+test.describe("Sharing a result", () => {
+  test("copies a spoiler-free line with one mark per round", async ({
+    page,
+    context,
+    isMobile,
+  }) => {
+    // Phones use the system share sheet instead of the clipboard.
+    test.skip(isMobile);
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await seedResults(page, []);
+    await page.goto("/games/epoche");
+    await startGame(page);
+    for (let i = 0; i < 5; i++) {
+      await page.getByRole("button", { name: "Salta" }).click();
+      await page
+        .getByRole("button", { name: /prossimo evento|vedi risultato/i })
+        .click();
+    }
+    await page.getByRole("button", { name: "Condividi il risultato" }).click();
+    await expect(page.getByText("Copiato: incollalo dove vuoi")).toBeVisible();
+    const text = await page.evaluate(() => navigator.clipboard.readText());
+    expect(text).toMatch(
+      /^Sette Giochi · Epoche #\d+\n⬛⬛⬛⬛⬛ {2}0 punti su 5\.000\nhttp.*\/games\/epoche$/,
+    );
+  });
+});

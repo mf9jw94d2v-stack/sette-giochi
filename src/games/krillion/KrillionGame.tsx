@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import { krillionAnswers } from "./answers";
 import { Link } from "react-router-dom";
 import { HelpCircle, Volume2, VolumeX } from "lucide-react";
@@ -746,6 +748,23 @@ function DiveLog({
       )}
 
       <div className="mt-8 flex flex-wrap gap-3">
+        {context?.kind !== "archive" && (
+          <ShareButton
+            className="kr-cmd kr-cmd-quiet"
+            text={buildShareText({
+              gameId: "krillion",
+              number:
+                mode === "daily" && dailyDate
+                  ? dailyNumber(dailyDate, EPOCH)
+                  : null,
+              // After a reload only the stored score is known, not the rounds.
+              ratios: alreadyPlayed
+                ? undefined
+                : state.rounds.map((r) => r.points / 100),
+              scoreText: `${depth.toLocaleString("it-IT")} m di profondità`,
+            })}
+          />
+        )}
         {mode === "practice" && onRestart && !archive && (
           <button
             type="button"

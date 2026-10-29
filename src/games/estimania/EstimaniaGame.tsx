@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { ShareButton } from "@/games/shared/ShareButton";
+import { buildShareText } from "@/games/shared/share";
 import { estimaniaAnswers } from "./answers";
 import { Link } from "react-router-dom";
 import {
@@ -838,6 +840,23 @@ function Ledger({
       )}
 
       <div className="flex flex-wrap gap-3">
+        {context?.kind !== "archive" && (
+          <ShareButton
+            className="es-btn es-btn-quiet"
+            text={buildShareText({
+              gameId: "estimania",
+              number:
+                mode === "daily" && dailyDate
+                  ? dailyNumber(dailyDate, EPOCH)
+                  : null,
+              // After a reload only the stored score is known, not the rounds.
+              ratios: alreadyPlayed
+                ? undefined
+                : state.rounds.map((r) => r.points / 100),
+              scoreText: `${score.toLocaleString("it-IT")} punti su 500`,
+            })}
+          />
+        )}
         {mode === "practice" && onRestart && !archive && (
           <button type="button" onClick={onRestart} className="es-btn">
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
