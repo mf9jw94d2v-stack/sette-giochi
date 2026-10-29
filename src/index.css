@@ -25,6 +25,8 @@
   --accent-foreground: hsl(30 8% 12%);
   --destructive: hsl(4 64% 46%);
   --destructive-foreground: hsl(40 30% 98%);
+  /* Red for text and outlines on the page background (not for fills). */
+  --destructive-text: hsl(4 70% 40%);
   --success: hsl(152 48% 34%);
   --radius: 0.75rem;
 
@@ -57,6 +59,7 @@
   --accent-foreground: hsl(40 18% 94%);
   --destructive: hsl(6 62% 52%);
   --destructive-foreground: hsl(40 30% 98%);
+  --destructive-text: hsl(6 88% 74%);
   --success: hsl(152 46% 50%);
 }
 
@@ -78,6 +81,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-text: var(--destructive-text);
   --color-success: var(--success);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 0.25rem);

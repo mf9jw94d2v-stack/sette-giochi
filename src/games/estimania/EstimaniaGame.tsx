@@ -180,10 +180,10 @@ export function EstimaniaGame({
         <ContextControl context={context} mode={mode} dailyDate={dailyDate} />
         <div className="ml-auto flex items-center gap-1">
           {phase === "playing" && (
-            <p
-              className="mr-3 text-right"
-              aria-label={`Punteggio ${result.score} su ${MAX_SCORE}`}
-            >
+            <p className="mr-3 text-right">
+              <span className="sr-only">
+                Punteggio {result.score} su {MAX_SCORE}
+              </span>
               <span
                 className="es-num text-2xl font-semibold"
                 aria-hidden="true"

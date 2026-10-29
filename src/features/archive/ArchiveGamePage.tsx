@@ -100,11 +100,17 @@ export function ArchiveGamePage() {
             <li key={date}>
               <Link
                 to={archivePath(meta.id, date)}
-                aria-label={`Rigioca ${meta.name} di ${formatDayLong(date)}`}
                 className="flex h-full min-h-32 flex-col rounded-md border border-border bg-card p-3 transition-colors hover:border-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
+                {/* The tile's own text is its name; the hidden part says
+                    which game and day, for screen readers. */}
+                <span className="sr-only">
+                  {meta.name}, {formatDayLong(date)}:{" "}
+                </span>
                 <span className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="capitalize">{weekday.format(d)}</span>
+                  <span className="capitalize" aria-hidden="true">
+                    {weekday.format(d)}
+                  </span>
                   <DaySquare
                     state={
                       score !== undefined
@@ -115,7 +121,10 @@ export function ArchiveGamePage() {
                     }
                   />
                 </span>
-                <span className="mt-1 font-display text-3xl font-bold leading-none">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 font-display text-3xl font-bold leading-none"
+                >
                   {d.getUTCDate()}
                   <span className="ml-1 text-sm font-medium text-muted-foreground">
                     {month.format(d)}

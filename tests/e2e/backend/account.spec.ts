@@ -191,8 +191,8 @@ test.describe("Results in the account", () => {
       if (i === 4) {
         // The running total in the header, after the last answer.
         const label = await page
-          .getByLabel(/^Punteggio \d+ su 500$/)
-          .getAttribute("aria-label");
+          .getByText(/^Punteggio \d+ su 500$/)
+          .textContent();
         shown = Number(label?.match(/Punteggio (\d+)/)?.[1]);
       }
       await page

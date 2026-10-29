@@ -4,6 +4,7 @@ import { GAMES } from "@/games/registry";
 import { GAME_THEMES } from "@/games/theme";
 import { GameCover } from "@/components/games/GameCover";
 import { TodayMeter } from "@/components/games/TodayMeter";
+import { NextChallenge } from "@/components/games/NextChallenge";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { CountUp } from "@/components/ui/CountUp";
 import { useToday } from "./useToday";
@@ -43,6 +44,11 @@ export function DailyPage() {
               {streak.current > 0 &&
                 `, serie di ${streak.current} ${streak.current === 1 ? "giorno" : "giorni"}`}
             </p>
+            {done.size === total && (
+              <p className="mt-1 text-sm font-medium">
+                <NextChallenge />
+              </p>
+            )}
           </div>
         }
       />

@@ -242,7 +242,7 @@ export function SettingsPage() {
             <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4">
               <p className="flex items-start gap-2 text-sm">
                 <AlertTriangle
-                  className="mt-0.5 h-4 w-4 shrink-0 text-destructive"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-destructive-text"
                   aria-hidden="true"
                 />
                 <span>
@@ -273,7 +273,7 @@ export function SettingsPage() {
             <button
               type="button"
               onClick={() => setConfirmErase(true)}
-              className="inline-flex h-11 items-center gap-2 rounded-lg border border-destructive/40 px-4 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10"
+              className="inline-flex h-11 items-center gap-2 rounded-lg border border-destructive-text/50 px-4 text-sm font-medium text-destructive-text transition-colors hover:bg-destructive/10"
             >
               <Trash2 className="h-4 w-4" aria-hidden="true" />
               Cancella i miei dati

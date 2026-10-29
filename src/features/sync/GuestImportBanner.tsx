@@ -96,7 +96,7 @@ export function GuestImportBanner() {
         server non può verificare partite giocate senza account.
       </p>
       {state === "error" && (
-        <p role="alert" className="mt-2 text-sm text-destructive">
+        <p role="alert" className="mt-2 text-sm text-destructive-text">
           Non sono riuscito ad aggiungerle. Riprova tra poco.
         </p>
       )}

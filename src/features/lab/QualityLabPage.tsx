@@ -128,7 +128,7 @@ function QuarantineRow({ failure }: { failure: LevelReview }) {
             "mt-2 rounded-md px-2.5 py-1.5 text-xs",
             recheck.status === "published"
               ? "bg-success/10 text-success"
-              : "bg-destructive/10 text-destructive",
+              : "bg-destructive/10 text-destructive-text",
           )}
         >
           {recheck.status === "published"

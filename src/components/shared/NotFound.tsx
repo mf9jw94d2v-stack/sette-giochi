@@ -7,7 +7,7 @@ export function NotFound() {
   return (
     <section className="grid items-center gap-10 py-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div>
-        <p className="font-display text-[clamp(5rem,16vw,10rem)] font-bold leading-none text-muted-foreground/40">
+        <p className="font-display text-[clamp(5rem,16vw,10rem)] font-bold leading-none text-muted-foreground">
           404
         </p>
         <h1 className="mt-2 font-display text-title font-bold">

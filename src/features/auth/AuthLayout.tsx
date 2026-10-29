@@ -155,7 +155,7 @@ export function Field({
         </p>
       )}
       {error && (
-        <p id={errorId} className="mt-1.5 text-sm text-destructive">
+        <p id={errorId} className="mt-1.5 text-sm text-destructive-text">
           {error}
         </p>
       )}
@@ -213,7 +213,7 @@ export function PasswordField(
         </p>
       )}
       {error && (
-        <p id={errorId} className="mt-1.5 text-sm text-destructive">
+        <p id={errorId} className="mt-1.5 text-sm text-destructive-text">
           {error}
         </p>
       )}

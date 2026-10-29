@@ -11,6 +11,8 @@ import { calendarDays, gameStats, overallStats } from "@/features/stats/stats";
 import { useAllResults } from "@/features/stats/useResults";
 import { challengeDate, DEFAULT_TIMEZONE } from "@/lib/dailyDate";
 import { useAuth } from "@/features/auth/authContext";
+import { achievements } from "@/features/stats/achievements";
+import { AchievementList } from "@/components/games/AchievementList";
 
 const link = "font-medium text-primary underline-offset-4 hover:underline";
 
@@ -176,6 +178,13 @@ export function ProfilePage() {
               </p>
             )}
           </div>
+
+          <section aria-labelledby="my-goals">
+            <h2 id="my-goals" className="mb-1 font-display text-xl font-bold">
+              Traguardi
+            </h2>
+            <AchievementList items={achievements(daily, archive, today)} />
+          </section>
 
           <section aria-labelledby="my-games">
             <h2 id="my-games" className="mb-3 font-display text-xl font-bold">

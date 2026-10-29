@@ -3,6 +3,7 @@ import { GAMES } from "@/games/registry";
 import { GAME_THEMES } from "@/games/theme";
 import { DoneTag, GameCover } from "@/components/games/GameCover";
 import { TodayMeter } from "@/components/games/TodayMeter";
+import { NextChallenge } from "@/components/games/NextChallenge";
 import { useToday } from "@/features/daily/useToday";
 import { formatDayLong } from "@/lib/formatDate";
 import { gamePath } from "@/games/slugs";
@@ -21,7 +22,7 @@ export function HomePage() {
     : done.size === 0
       ? "Oggi non hai ancora giocato."
       : done.size === total
-        ? "Hai completato tutte e sette le sfide di oggi."
+        ? "Tutte e sette, complimenti!"
         : `Hai completato ${done.size} ${done.size === 1 ? "sfida" : "sfide"} su ${total}.`;
 
   return (
@@ -32,13 +33,21 @@ export function HomePage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[88%] overflow-hidden sm:w-[64%] lg:w-[54%]"
         >
-          <img
-            src={`${import.meta.env.BASE_URL}hero-illustration.png`}
-            alt=""
-            loading="eager"
-            draggable={false}
-            className="hero-illustration h-full w-full object-cover object-right"
-          />
+          {/* Same picture, lossless WebP (a quarter of the weight); the PNG
+              stays for browsers without WebP. */}
+          <picture className="contents">
+            <source
+              type="image/webp"
+              srcSet={`${import.meta.env.BASE_URL}hero-illustration.webp`}
+            />
+            <img
+              src={`${import.meta.env.BASE_URL}hero-illustration.png`}
+              alt=""
+              loading="eager"
+              draggable={false}
+              className="hero-illustration h-full w-full object-cover object-right"
+            />
+          </picture>
         </div>
         <div className="relative z-10 max-w-xl">
           <p className="text-sm font-medium text-muted-foreground first-letter:uppercase">
@@ -52,6 +61,12 @@ export function HomePage() {
             <TodayMeter done={done} />
             <p className="mt-3 text-base" role="status">
               {progress}
+              {done.size === total && !isLoading && (
+                <>
+                  {" "}
+                  <NextChallenge />
+                </>
+              )}
               {streak.current > 1 && ` Sei a ${streak.current} giorni di fila.`}
             </p>
           </div>
@@ -99,11 +114,15 @@ export function HomePage() {
 
         {/* Large covers, as the home always had them: one per row on a
             phone, two on a tablet, three on a wide screen. */}
-        <ul className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Flex, not grid, so the seventh cover sits centred on its own row. */}
+        <ul className="flex flex-wrap justify-center gap-x-5 gap-y-8">
           {GAMES.map((game) => {
             const result = done.get(game.id);
             return (
-              <li key={game.id}>
+              <li
+                key={game.id}
+                className="w-full sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]"
+              >
                 <Link to={gamePath(game.id)} className="cover-link group block">
                   <GameCover
                     id={game.id}
