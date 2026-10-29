@@ -1,8 +1,9 @@
 # Deployment
 
-_Aggiornato: 29 ottobre 2026._ **Niente è stato pubblicato** e nessun servizio
-è stato creato: servono un tuo account e la tua autorizzazione. Qui sotto c'è
-tutto ciò che va fatto, nell'ordine.
+_Aggiornato: 29 ottobre 2026._ Stato al 29 ottobre 2026: progetto Supabase creato, migrazioni applicate,
+funzioni pubblicate; sito su GitHub Pages:
+https://mf9jw94d2v-stack.github.io/sette-giochi/. Restano da fare a mano: URL
+e modelli email in Supabase (sezione 2) e la variabile `ALLOWED_ORIGINS`.
 
 ## 0. Cosa è già pronto nel repository
 
@@ -132,7 +133,7 @@ Altri host statici vanno bene uguale: servono la build `npm run build`
 - [x] Migrazioni non distruttive
 - [x] Nessun segreto nel repository né nel bundle
 - [x] Test verdi (unit, database, e2e)
-- [ ] Migrazioni applicate a un progetto reale
-- [ ] Funzioni pubblicate e provate in Deno
+- [x] Migrazioni applicate a un progetto reale
+- [x] Funzioni pubblicate (provate in Deno solo dopo la prima partita salvata)
 - [ ] Email di conferma e recupero verificate
-- [ ] Autorizzazione esplicita a pubblicare
+- [x] Autorizzazione esplicita a pubblicare (GitHub Pages)

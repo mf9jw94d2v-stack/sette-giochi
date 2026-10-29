@@ -81,7 +81,7 @@ Nessuna di queste è presentata come dato reale.
 | Vitest                           | COMPLETATO E VERIFICATO                       | 165 test                                                                                                                                                                                                   |
 | Playwright                       | COMPLETATO E VERIFICATO                       | `playwright.config.ts`, 46 test su build di produzione                                                                                                                                                     |
 | fast-check                       | COMPLETATO E VERIFICATO                       | property test in 8 file, incluso `src/services/quality/pipeline.test.ts`                                                                                                                                   |
-| GitHub Actions                   | IMPLEMENTATO, MA NON COMPLETAMENTE VERIFICATO | `.github/workflows/ci.yml`: ogni passo è stato eseguito in locale e passa, ma il workflow non è mai girato su GitHub (il repository non ha un remote)                                                      |
+| GitHub Actions                   | COMPLETATO E VERIFICATO                       | `ci.yml` e `pages.yml` girati su GitHub il 29/10: tutti i job verdi, sito pubblicato                                                                                                                       |
 | Nessuna dipendenza ridondante    | COMPLETATO E VERIFICATO                       | `jiti` dichiarato esplicitamente perché usato dagli script                                                                                                                                                 |
 
 ## 4. Interfaccia
@@ -197,7 +197,7 @@ Nessuno di questi è nascosto altrove nel documento.
 1. **Backend su un progetto reale**: il codice c'è ed è testato in locale;
    applicare migrazioni, pubblicare le funzioni e configurare le email
    richiede il tuo account Supabase (`docs/DEPLOYMENT.md`).
-2. **Pubblicazione del sito**: non effettuata, serve la tua autorizzazione.
+2. **Pubblicazione del sito**: fatta il 29/10 su GitHub Pages, https://mf9jw94d2v-stack.github.io/sette-giochi/ (autorizzata).
 3. **Anti-cheat completo**: il server verifica che il punteggio corrisponda
    alle risposte, ma le soluzioni restano nel bundle e il tempo non è
    verificato (ADR-0011).
@@ -207,8 +207,7 @@ Nessuno di questi è nascosto altrove nel documento.
 7. **Lint TypeScript**: bloccato a monte da typescript-eslint (ADR-0003).
 8. **Audit di accessibilità completo** (screen reader, contrasto misurato su
    tutti gli stati) e **Lighthouse**: non eseguiti.
-9. **CI su GitHub**: i passi passano in locale, il workflow non è mai girato
-   (manca un remote).
+9. ~~CI su GitHub~~: girata il 29/10, tutta verde.
 10. **Corsa concorrente reale** sui risultati ufficiali: da provare sul
     database vero.
 
