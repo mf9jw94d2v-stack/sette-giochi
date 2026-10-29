@@ -17,7 +17,10 @@ describe("game registry", () => {
   });
 
   it("looks up by id and returns undefined for unknown ids", () => {
-    expect(getGameMeta("krillion")?.name).toBe("Krillion");
+    expect(getGameMeta("krillion")?.name).toBe("Abissi");
+    // The public slug finds the same game.
+    expect(getGameMeta("abissi")?.id).toBe("krillion");
+    expect(getGameMeta("in-scala")?.id).toBe("size-it-up");
     expect(getGameMeta("nope")).toBeUndefined();
   });
 

@@ -306,7 +306,7 @@ export function FactMapGame({
               style={{ color: "var(--fm-accent)" }}
               aria-hidden="true"
             />
-            Fact Map
+            Atlante
           </h1>
           <ContextControl context={context} mode={mode} dailyDate={dailyDate} />
           <div className="ml-auto flex items-center gap-1 sm:ml-0">
@@ -389,7 +389,7 @@ export function FactMapGame({
       <RulesDialog
         open={rulesOpen}
         onClose={() => setRulesOpen(false)}
-        title="Come si gioca a Fact Map"
+        title="Come si gioca ad Atlante"
         className="fm-dialog"
         titleClassName="text-xl font-semibold"
         closeClassName="fm-btn mt-5 w-full"

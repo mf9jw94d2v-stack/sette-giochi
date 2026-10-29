@@ -1,5 +1,11 @@
 import { Suspense, type ReactNode } from "react";
-import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from "react-router-dom";
+import { GAME_IDS } from "@/types/game";
+import { GAME_SLUG, gamePath } from "@/games/slugs";
 import { RootLayout, type RouteHandle } from "@/app/layouts/RootLayout";
 import { HomePage } from "@/features/home/HomePage";
 import { GamesIndexPage } from "@/features/games/GamesIndexPage";
@@ -55,9 +61,17 @@ function lazyRoute(
 
 const IMMERSIVE: RouteHandle = { immersive: true };
 
+/** Old addresses, with the internal id, keep working. */
+const legacyGameRoutes: RouteObject[] = GAME_IDS.filter(
+  (id) => GAME_SLUG[id] !== id,
+).map((id) => ({
+  path: `games/${id}`,
+  element: <Navigate replace to={gamePath(id)} />,
+}));
+
 const gameRoutes: RouteObject[] = [
   lazyRoute(
-    "games/gazillion",
+    `games/${GAME_SLUG["gazillion"]}`,
     async () => ({
       default: (await import("@/games/gazillion/GazillionGame"))
         .GazillionPlayPage,
@@ -65,7 +79,7 @@ const gameRoutes: RouteObject[] = [
     IMMERSIVE,
   ),
   lazyRoute(
-    "games/estimania",
+    `games/${GAME_SLUG["estimania"]}`,
     async () => ({
       default: (await import("@/games/estimania/EstimaniaGame"))
         .EstimaniaPlayPage,
@@ -73,7 +87,7 @@ const gameRoutes: RouteObject[] = [
     IMMERSIVE,
   ),
   lazyRoute(
-    "games/size-it-up",
+    `games/${GAME_SLUG["size-it-up"]}`,
     async () => ({
       default: (await import("@/games/size-it-up/SizeItUpGame"))
         .SizeItUpPlayPage,
@@ -81,28 +95,28 @@ const gameRoutes: RouteObject[] = [
     IMMERSIVE,
   ),
   lazyRoute(
-    "games/plain",
+    `games/${GAME_SLUG["plain"]}`,
     async () => ({
       default: (await import("@/games/plain/PlainGame")).PlainPlayPage,
     }),
     IMMERSIVE,
   ),
   lazyRoute(
-    "games/krillion",
+    `games/${GAME_SLUG["krillion"]}`,
     async () => ({
       default: (await import("@/games/krillion/KrillionGame")).KrillionPlayPage,
     }),
     IMMERSIVE,
   ),
   lazyRoute(
-    "games/geoslice",
+    `games/${GAME_SLUG["geoslice"]}`,
     async () => ({
       default: (await import("@/games/geoslice/GeoSliceGame")).GeoSlicePlayPage,
     }),
     IMMERSIVE,
   ),
   lazyRoute(
-    "games/fact-map",
+    `games/${GAME_SLUG["fact-map"]}`,
     async () => ({
       default: (await import("@/games/fact-map/FactMapGame")).FactMapPlayPage,
     }),
@@ -181,6 +195,7 @@ export const router = createBrowserRouter(
         { index: true, element: <HomePage /> },
         { path: "games", element: <GamesIndexPage /> },
         ...gameRoutes,
+        ...legacyGameRoutes,
         { path: "games/:gameId", element: <GameDetailPage /> },
         { path: "daily", element: <DailyPage /> },
         { path: "archive", element: <ArchivePage /> },

@@ -169,3 +169,20 @@ test.describe("Light and dark theme in every game", () => {
     }
   });
 });
+
+test.describe("Public game addresses", () => {
+  test("each game lives at its own name, and old links redirect there", async ({
+    page,
+  }) => {
+    for (const g of GAMES) {
+      await page.goto(`/games/${g.slug}`);
+      await expect(page.getByRole("button", { name: g.start })).toBeVisible();
+      if (g.slug !== g.id) {
+        await page.goto(`/games/${g.id}`);
+        await expect(page).toHaveURL(new RegExp(`/games/${g.slug}$`));
+      }
+    }
+    await page.goto("/archive/gazillion");
+    await expect(page).toHaveURL(/\/archive\/epoche$/);
+  });
+});

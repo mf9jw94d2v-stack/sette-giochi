@@ -13,6 +13,7 @@ import { useAllResults } from "@/features/stats/useResults";
 import { addDays } from "@/features/stats/stats";
 import { levelIdFor } from "@/games/playable";
 import { challengeDate } from "@/lib/dailyDate";
+import { archivePath } from "@/games/slugs";
 
 const SPAN = 14;
 
@@ -73,7 +74,7 @@ export function ArchivePage() {
           return (
             <li key={game.id} className="border-b border-border">
               <Link
-                to={`/archive/${game.id}`}
+                to={archivePath(game.id)}
                 className="cover-link group grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-x-4 gap-y-2 py-4 sm:grid-cols-[6rem_minmax(0,1fr)_auto] sm:gap-x-6"
               >
                 <GameCover

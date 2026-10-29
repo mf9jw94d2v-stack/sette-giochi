@@ -3,6 +3,7 @@ import { getGameMeta } from "@/games/registry";
 import { GameCover } from "@/components/games/GameCover";
 import type { GameStats } from "@/features/stats/stats";
 import { formatDayRelative } from "@/lib/formatDate";
+import { gamePath } from "@/games/slugs";
 
 function num(n: number | null): string {
   return n === null ? "—" : n.toLocaleString("it-IT");
@@ -55,7 +56,7 @@ export function GameStatsTable({
               <tr key={s.gameId} className="border-b border-border">
                 <th scope="row" className="py-3 pr-3 font-normal">
                   <Link
-                    to={`/games/${s.gameId}`}
+                    to={gamePath(s.gameId)}
                     className="cover-link group flex items-center gap-3"
                   >
                     <GameCover

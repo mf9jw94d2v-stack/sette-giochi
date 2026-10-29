@@ -173,7 +173,7 @@ export function EstimaniaGame({
       <header className="flex flex-wrap items-center gap-x-5 gap-y-3 border-b border-[var(--es-rule)] px-4 py-3 sm:px-10">
         <ContextLink context={context} />
         <h1 className="es-serif text-2xl font-extrabold italic tracking-tight">
-          Estimania
+          Stima
         </h1>
         <ContextControl context={context} mode={mode} dailyDate={dailyDate} />
         <div className="ml-auto flex items-center gap-1">
@@ -349,7 +349,7 @@ export function EstimaniaGame({
       <RulesDialog
         open={rulesOpen}
         onClose={() => setRulesOpen(false)}
-        title="Come si gioca a Estimania"
+        title="Come si gioca a Stima"
         className="es-dialog"
         titleClassName="es-serif text-2xl font-semibold"
         closeClassName="es-btn mt-6 w-full"

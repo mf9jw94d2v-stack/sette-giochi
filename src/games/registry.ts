@@ -1,4 +1,5 @@
 import type { GameId, GameMetadata } from "@/types/game";
+import { gameIdFromParam } from "./slugs";
 
 /**
  * Display metadata for the seven games.
@@ -11,7 +12,7 @@ import type { GameId, GameMetadata } from "@/types/game";
 export const GAME_METADATA: Record<GameId, GameMetadata> = {
   krillion: {
     id: "krillion",
-    name: "Krillion",
+    name: "Abissi",
     tagline: "Trova la risposta che nessuno dà.",
     description:
       "Quiz a risposta rara: più la tua risposta è insolita (ma giusta), più scendi in profondità.",
@@ -23,7 +24,7 @@ export const GAME_METADATA: Record<GameId, GameMetadata> = {
   },
   plain: {
     id: "plain",
-    name: "Plain",
+    name: "Quota",
     tagline: "Avvicinati il più possibile.",
     description:
       "Domande che hanno per risposta una misura: più ti avvicini al valore vero, più il tuo aereo sale di quota.",
@@ -35,7 +36,7 @@ export const GAME_METADATA: Record<GameId, GameMetadata> = {
   },
   "fact-map": {
     id: "fact-map",
-    name: "Fact Map",
+    name: "Atlante",
     tagline: "Dove nel mondo?",
     description:
       "Metti uno spillo sulla mappa: il punteggio dipende da quanto sei vicino al posto giusto.",
@@ -47,7 +48,7 @@ export const GAME_METADATA: Record<GameId, GameMetadata> = {
   },
   estimania: {
     id: "estimania",
-    name: "Estimania",
+    name: "Stima",
     tagline: "Quanto sai avvicinarti?",
     description:
       "Gioco di stima: rispondi con un numero e avvicinati il più possibile al valore reale.",
@@ -59,7 +60,7 @@ export const GAME_METADATA: Record<GameId, GameMetadata> = {
   },
   "size-it-up": {
     id: "size-it-up",
-    name: "Size It Up",
+    name: "In Scala",
     tagline: "Indovina le grandezze.",
     description:
       "Ridimensiona la sagoma di un oggetto accanto a un riferimento di misura nota, finché non ha la sua vera scala.",
@@ -71,7 +72,7 @@ export const GAME_METADATA: Record<GameId, GameMetadata> = {
   },
   geoslice: {
     id: "geoslice",
-    name: "GeoSlice",
+    name: "Taglio",
     tagline: "Taglia la mappa in due metà uguali.",
     description:
       "Una linea retta su una regione: metà degli abitanti da una parte, metà dall'altra, con dati di popolazione reali.",
@@ -83,7 +84,7 @@ export const GAME_METADATA: Record<GameId, GameMetadata> = {
   },
   gazillion: {
     id: "gazillion",
-    name: "Gazillion",
+    name: "Epoche",
     tagline: "Il viaggio nel tempo quotidiano.",
     description:
       "Per ogni evento, intrappola tra due valori l'anno in cui è successo. Più stretto è l'intervallo, più punti; anche gli errori vicini danno punti parziali.",
@@ -106,6 +107,8 @@ export const GAMES: GameMetadata[] = [
   GAME_METADATA.gazillion,
 ];
 
-export function getGameMeta(id: string): GameMetadata | undefined {
-  return (GAME_METADATA as Record<string, GameMetadata>)[id];
+/** Look a game up by its internal id or by its public slug. */
+export function getGameMeta(idOrSlug: string): GameMetadata | undefined {
+  const id = gameIdFromParam(idOrSlug);
+  return id ? GAME_METADATA[id] : undefined;
 }

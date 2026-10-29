@@ -212,7 +212,7 @@ export function KrillionGame({
             className="text-3xl tracking-widest"
             style={{ color: "var(--kr-sonar)" }}
           >
-            KRILLION
+            ABISSI
           </h1>
           <ContextControl context={context} mode={mode} dailyDate={dailyDate} />
           <div className="ml-auto flex items-center">

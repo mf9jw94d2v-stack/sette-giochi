@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { GAMES } from "@/games/registry";
 import { GameCover } from "@/components/games/GameCover";
+import { gamePath } from "@/games/slugs";
 
 export function NotFound() {
   return (
@@ -34,7 +35,7 @@ export function NotFound() {
       <ul className="grid grid-cols-4 gap-2 sm:grid-cols-7 lg:grid-cols-4">
         {GAMES.map((g) => (
           <li key={g.id}>
-            <Link to={`/games/${g.id}`} className="cover-link block">
+            <Link to={gamePath(g.id)} className="cover-link block">
               <GameCover id={g.id} showName={false} className="aspect-square" />
               <span className="mt-1 block truncate text-xs text-muted-foreground">
                 {g.name}

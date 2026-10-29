@@ -27,7 +27,7 @@ export const TIER_LABEL: Record<KrillionTier, string> = {
   schooler: "Di banco",
   rare: "Rara",
   deepCut: "Chicca",
-  krillion: "Una su un krillion",
+  krillion: "Introvabile",
 };
 
 /** One accepted answer and the rarity tier it scores. */

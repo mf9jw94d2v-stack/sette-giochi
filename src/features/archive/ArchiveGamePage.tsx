@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { getGameMeta } from "@/games/registry";
 import { GameCover } from "@/components/games/GameCover";
@@ -9,6 +9,7 @@ import { addDays } from "@/features/stats/stats";
 import { levelIdFor } from "@/games/playable";
 import { challengeDate } from "@/lib/dailyDate";
 import { formatDayLong, parseDay } from "@/lib/formatDate";
+import { archivePath, isLegacyParam } from "@/games/slugs";
 
 const weekday = new Intl.DateTimeFormat("it-IT", { weekday: "short" });
 const month = new Intl.DateTimeFormat("it-IT", { month: "short" });
@@ -16,8 +17,9 @@ const month = new Intl.DateTimeFormat("it-IT", { month: "short" });
 const PAGE = 14;
 
 export function ArchiveGamePage() {
-  const { gameId } = useParams();
-  const meta = getGameMeta(gameId ?? "");
+  const { gameId: param } = useParams();
+  const meta = getGameMeta(param ?? "");
+  const gameId = meta?.id;
   const today = challengeDate();
   const { daily, archive } = useAllResults();
   const [days, setDays] = useState(PAGE);
@@ -47,6 +49,9 @@ export function ArchiveGamePage() {
     return m;
   }, [archive]);
 
+  // Old links used the internal id: send them to the public address.
+  if (meta && isLegacyParam(param))
+    return <Navigate replace to={archivePath(meta.id)} />;
   if (!meta) {
     return (
       <div className="border-y border-border px-6 py-14 text-center">
@@ -94,7 +99,7 @@ export function ArchiveGamePage() {
           return (
             <li key={date}>
               <Link
-                to={`/archive/${meta.id}/${date}`}
+                to={archivePath(meta.id, date)}
                 aria-label={`Rigioca ${meta.name} di ${formatDayLong(date)}`}
                 className="flex h-full min-h-32 flex-col rounded-md border border-border bg-card p-3 transition-colors hover:border-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >

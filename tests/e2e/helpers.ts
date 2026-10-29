@@ -6,13 +6,18 @@ import { expect, type Page } from "@playwright/test";
  * wording on all seven.
  */
 export const GAMES = [
-  { id: "krillion", name: "Krillion", start: /inizia la discesa/i },
-  { id: "plain", name: "Plain", start: /decolla/i },
-  { id: "fact-map", name: "Fact Map", start: /inizia/i },
-  { id: "estimania", name: "Estimania", start: /inizia/i },
-  { id: "size-it-up", name: "Size It Up", start: /inizia/i },
-  { id: "geoslice", name: "GeoSlice", start: /inizia/i },
-  { id: "gazillion", name: "Gazillion", start: /inizia/i },
+  {
+    id: "krillion",
+    slug: "abissi",
+    name: "Abissi",
+    start: /inizia la discesa/i,
+  },
+  { id: "plain", slug: "quota", name: "Quota", start: /decolla/i },
+  { id: "fact-map", slug: "atlante", name: "Atlante", start: /inizia/i },
+  { id: "estimania", slug: "stima", name: "Stima", start: /inizia/i },
+  { id: "size-it-up", slug: "in-scala", name: "In Scala", start: /inizia/i },
+  { id: "geoslice", slug: "taglio", name: "Taglio", start: /inizia/i },
+  { id: "gazillion", slug: "epoche", name: "Epoche", start: /inizia/i },
 ] as const;
 
 /**

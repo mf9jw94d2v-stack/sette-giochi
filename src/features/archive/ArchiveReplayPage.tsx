@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getGameMeta } from "@/games/registry";
 import { GAME_BOARDS } from "@/games/playable";
 import { challengeDate, isChallengeDate } from "@/lib/dailyDate";
+import { archivePath, gamePath, isLegacyParam } from "@/games/slugs";
 
 function Problem({
   title,
@@ -39,6 +40,10 @@ export function ArchiveReplayPage() {
   const meta = getGameMeta(gameId ?? "");
   const today = challengeDate();
 
+  // Old links used the internal id: send them to the public address.
+  if (meta && isLegacyParam(gameId))
+    return <Navigate replace to={archivePath(meta.id, date)} />;
+
   if (!meta) {
     return (
       <Problem
@@ -54,7 +59,7 @@ export function ArchiveReplayPage() {
       <Problem
         title="Data non valida"
         body="L'archivio usa date nel formato giorno-mese-anno. Scegli un giorno dall'elenco."
-        to={`/archive/${meta.id}`}
+        to={archivePath(meta.id)}
         cta="Scegli un giorno"
       />
     );
@@ -64,7 +69,7 @@ export function ArchiveReplayPage() {
       <Problem
         title="Questa sfida è ancora di oggi"
         body="L'archivio parte da ieri. La sfida di oggi si gioca dalla pagina del gioco e conta per la tua serie."
-        to={`/games/${meta.id}`}
+        to={gamePath(meta.id)}
         cta={`Gioca ${meta.name}`}
       />
     );
@@ -86,7 +91,7 @@ export function ArchiveReplayPage() {
         key={`${meta.id}-${date}`}
         mode="practice"
         seed={date}
-        context={{ kind: "archive", date, backTo: `/archive/${meta.id}` }}
+        context={{ kind: "archive", date, backTo: archivePath(meta.id) }}
       />
     </Suspense>
   );

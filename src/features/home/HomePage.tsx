@@ -5,6 +5,7 @@ import { DoneTag, GameCover } from "@/components/games/GameCover";
 import { TodayMeter } from "@/components/games/TodayMeter";
 import { useToday } from "@/features/daily/useToday";
 import { formatDayLong } from "@/lib/formatDate";
+import { gamePath } from "@/games/slugs";
 
 /**
  * Home: today first. The banner says what day it is and how far you are, and
@@ -58,7 +59,7 @@ export function HomePage() {
           <div className="mt-7 flex flex-wrap items-center gap-3">
             {next ? (
               <Link
-                to={`/games/${next.id}`}
+                to={gamePath(next.id)}
                 className="inline-flex h-12 items-center rounded-lg bg-primary px-6 text-base font-semibold text-primary-foreground shadow-sm transition-[filter,transform] hover:brightness-110 active:scale-[0.98]"
               >
                 {done.size === 0
@@ -103,10 +104,7 @@ export function HomePage() {
             const result = done.get(game.id);
             return (
               <li key={game.id}>
-                <Link
-                  to={`/games/${game.id}`}
-                  className="cover-link group block"
-                >
+                <Link to={gamePath(game.id)} className="cover-link group block">
                   <GameCover
                     id={game.id}
                     nameSize="lg"

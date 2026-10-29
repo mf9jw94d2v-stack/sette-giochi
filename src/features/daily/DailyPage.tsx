@@ -9,6 +9,7 @@ import { CountUp } from "@/components/ui/CountUp";
 import { useToday } from "./useToday";
 import { formatDayLong } from "@/lib/formatDate";
 import { cn } from "@/lib/utils";
+import { gamePath } from "@/games/slugs";
 
 /**
  * Today's scoreboard: seven rows, one per game, each saying whether today's
@@ -58,7 +59,7 @@ export function DailyPage() {
             return (
               <li key={game.id} className="border-b border-border">
                 <Link
-                  to={`/games/${game.id}`}
+                  to={gamePath(game.id)}
                   className="cover-link group grid grid-cols-[4.5rem_minmax(0,1fr)_auto] items-center gap-x-4 py-4 sm:grid-cols-[7.5rem_minmax(0,1fr)_auto_auto] sm:gap-x-6"
                 >
                   <GameCover

@@ -169,7 +169,7 @@ export function GazillionGame({
             style={{ color: "var(--gz-amber)" }}
             aria-hidden="true"
           />
-          Gazillion
+          Epoche
         </h1>
         <ContextControl context={context} mode={mode} dailyDate={dailyDate} />
         <div className="ml-auto flex items-center gap-1">
@@ -341,7 +341,7 @@ export function GazillionGame({
       <RulesDialog
         open={rulesOpen}
         onClose={() => setRulesOpen(false)}
-        title="Come si gioca a Gazillion"
+        title="Come si gioca a Epoche"
         className="gz-dialog"
         titleClassName="gz-display text-xl font-bold"
         closeClassName="gz-btn mt-5 w-full"

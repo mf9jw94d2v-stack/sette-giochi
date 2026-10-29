@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GAMES, getGameMeta } from "@/games/registry";
-import { GAME_IDS, type GameId } from "@/types/game";
+import type { GameId } from "@/types/game";
 import { GameCover } from "@/components/games/GameCover";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useAuth } from "@/features/auth/authContext";
@@ -18,6 +18,7 @@ import {
 import { addDays } from "@/features/stats/stats";
 import { challengeDate } from "@/lib/dailyDate";
 import { cn } from "@/lib/utils";
+import { GAME_SLUG, gameIdFromParam, gamePath } from "@/games/slugs";
 
 type Period = "day" | "week";
 
@@ -48,7 +49,7 @@ export function LeaderboardPage() {
   const today = challengeDate();
   const [params, setParams] = useSearchParams();
   const rawGame = params.get("game");
-  const gameId: GameId = GAME_IDS.find((g) => g === rawGame) ?? GAMES[0].id;
+  const gameId: GameId = gameIdFromParam(rawGame) ?? GAMES[0].id;
   const period: Period = params.get("period") === "week" ? "week" : "day";
   const rawDate = params.get("date");
   const anchor =
@@ -115,7 +116,7 @@ export function LeaderboardPage() {
                 <button
                   type="button"
                   aria-pressed={active}
-                  onClick={() => set({ game: g.id })}
+                  onClick={() => set({ game: GAME_SLUG[g.id] })}
                   className={cn(
                     "cover-link group block w-full rounded-xl p-1 text-left transition-colors",
                     active
@@ -294,7 +295,7 @@ function Board({
           </p>
           {day === today && period === "day" && (
             <Link
-              to={`/games/${gameId}`}
+              to={gamePath(gameId)}
               className="mt-3 inline-flex h-11 items-center rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground hover:brightness-110"
             >
               Gioca la sfida di oggi

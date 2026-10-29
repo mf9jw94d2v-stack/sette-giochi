@@ -201,7 +201,7 @@ export function GeoSliceGame({
             style={{ color: "var(--gs-a)" }}
             aria-hidden="true"
           />
-          GeoSlice
+          Taglio
         </h1>
         <div className="ml-auto flex items-center gap-1.5">
           <button
@@ -288,7 +288,7 @@ export function GeoSliceGame({
       <RulesDialog
         open={rulesOpen}
         onClose={() => setRulesOpen(false)}
-        title="Come si gioca a GeoSlice"
+        title="Come si gioca a Taglio"
         className="gs-dialog"
         titleClassName="gs-num text-lg font-bold uppercase tracking-[0.12em]"
         closeClassName="gs-btn mt-5 w-full"

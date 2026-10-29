@@ -191,7 +191,7 @@ export function PlainGame({
       <div className="flex min-w-0 flex-col">
         <header className="flex flex-wrap items-center gap-x-5 gap-y-2 px-5 pt-5 sm:px-12 sm:pt-8">
           <ContextLink context={context} />
-          <h1 className="text-lg font-semibold tracking-tight">Plain</h1>
+          <h1 className="text-lg font-semibold tracking-tight">Quota</h1>
           <ContextControl context={context} mode={mode} dailyDate={dailyDate} />
           <div className="ml-auto flex items-center gap-1">
             {phase === "playing" && (
@@ -351,7 +351,7 @@ export function PlainGame({
       <RulesDialog
         open={rulesOpen}
         onClose={() => setRulesOpen(false)}
-        title="Come si gioca a Plain"
+        title="Come si gioca a Quota"
         className="pl-dialog"
         titleClassName="text-xl font-semibold tracking-tight"
         closeClassName="pl-btn mt-6 w-full"

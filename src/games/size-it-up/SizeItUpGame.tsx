@@ -210,7 +210,7 @@ export function SizeItUpGame({
           next. Wider: everything on one row, tools last. */}
       <header className="siu-head flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 sm:gap-x-5 sm:px-8">
         <ContextLink context={context} />
-        <h1 className="siu-title text-2xl">Size It Up</h1>
+        <h1 className="siu-title text-2xl">In Scala</h1>
         <div className="order-4 sm:order-none">
           <ContextControl context={context} mode={mode} plateNo={plateNo} />
         </div>

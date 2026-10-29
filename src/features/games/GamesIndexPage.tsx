@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { useAllResults } from "@/features/stats/useResults";
 import { challengeDate } from "@/lib/dailyDate";
 import { cn } from "@/lib/utils";
+import { archivePath, gamePath } from "@/games/slugs";
 
 /** "krillion.cc" from "https://krillion.cc/". */
 function host(url: string): string {
@@ -165,7 +166,7 @@ export function GamesIndexPage() {
                 {/* The cover repeats the main link, so it is skipped by the
                     keyboard and by screen readers. */}
                 <Link
-                  to={`/games/${game.id}`}
+                  to={gamePath(game.id)}
                   tabIndex={-1}
                   aria-hidden="true"
                   className="cover-link block"
@@ -200,7 +201,7 @@ export function GamesIndexPage() {
 
                 <div className="flex flex-wrap gap-2 sm:col-start-2 lg:col-start-auto lg:flex-col lg:items-stretch">
                   <Link
-                    to={`/games/${game.id}`}
+                    to={gamePath(game.id)}
                     className={cn(
                       "inline-flex h-11 items-center justify-center rounded-lg px-5 text-sm font-semibold transition-[filter]",
                       done
@@ -212,7 +213,7 @@ export function GamesIndexPage() {
                     <span className="sr-only"> di {game.name}</span>
                   </Link>
                   <Link
-                    to={`/archive/${game.id}`}
+                    to={archivePath(game.id)}
                     className="inline-flex h-11 items-center justify-center rounded-lg px-5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   >
                     Giorni passati

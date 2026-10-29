@@ -15,13 +15,13 @@ test.describe("Game Quality Lab", () => {
     const main = page.getByRole("main");
     await expect(main).toContainText(/livelli generati/i);
     for (const name of [
-      "Krillion",
-      "Plain",
-      "Fact Map",
-      "Estimania",
-      "Size It Up",
-      "GeoSlice",
-      "Gazillion",
+      "Abissi",
+      "Quota",
+      "Atlante",
+      "Stima",
+      "In Scala",
+      "Taglio",
+      "Epoche",
     ]) {
       await expect(
         main.getByRole("heading", { name, exact: true }).first(),
