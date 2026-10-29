@@ -25,6 +25,7 @@ import {
 } from "./engine";
 import { factGenerator } from "./generator";
 import { greatCircle, pathOf } from "./geo";
+import type { PoliticalMap } from "./data/politicalMap";
 import type { FactGuess, FactLevelData, FactState } from "./types";
 import { Pin, WorldMap, type MapFocus } from "./components/WorldMap";
 import "./fact-map.css";
@@ -93,9 +94,7 @@ export function FactMapGame({
   const [reveal, setReveal] = useState<Reveal | null>(null);
   const [guess, setGuess] = useState<FactGuess | null>(null);
   const [hintUsed, setHintUsed] = useState(false);
-  const [world, setWorld] = useState<{ land: string; borders: string } | null>(
-    null,
-  );
+  const [world, setWorld] = useState<PoliticalMap | null>(null);
   const [rulesOpen, setRulesOpen] = useState(false);
   const [muted, toggleMute] = useMute();
   const lock = useDailyLock("fact-map", mode, dailyDate);
@@ -122,14 +121,13 @@ export function FactMapGame({
   useEffect(() => {
     let active = true;
     void import("./data/world").then((m) => {
-      if (active) setWorld({ land: m.LAND_PATH, borders: m.BORDERS_PATH });
+      if (active)
+        setWorld({ countries: m.COUNTRY_PATHS, labels: m.COUNTRY_LABELS });
     });
     return () => {
       active = false;
     };
   }, []);
-  const landPath = world?.land ?? null;
-  const bordersPath = world?.borders ?? null;
 
   useEffect(() => {
     setGuess(null);
@@ -222,8 +220,7 @@ export function FactMapGame({
   return (
     <div className="fm game-viewport-fixed relative overflow-hidden">
       <WorldMap
-        landPath={landPath}
-        bordersPath={bordersPath}
+        world={world}
         focus={focus}
         label={
           phase === "playing" && !reveal

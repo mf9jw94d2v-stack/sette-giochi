@@ -1,34 +1,35 @@
 /**
- * Build Atlante's world map from Natural Earth 1:50m (public domain), via the
- * `world-atlas` package (ISC). Writes, already projected (Equal Earth, see
- * src/games/fact-map/projection.ts) and simplified:
+ * Build Atlante's political world map from Natural Earth 1:50m admin-0
+ * countries (public domain). The file carries Italian names (NAME_IT), a
+ * 7-colour scheme in which neighbours never share a colour (MAPCOLOR7) and
+ * label points with the zoom from which to show them (MIN_LABEL).
  *
- *   src/games/fact-map/data/world.ts   LAND_PATH, BORDERS_PATH — the game map
- *   src/components/games/worldCover.ts WORLD_COVER_PATH — a light outline for
- *                                      the Atlante cover (kept tiny: it ships
- *                                      with the home page)
+ * Writes, already projected (Miller, src/games/fact-map/projection.ts) and
+ * simplified:
+ *   src/games/fact-map/data/world.ts   COUNTRY_PATHS, COUNTRY_LABELS
+ *   src/components/games/worldCover.ts WORLD_COVER_PATH (tiny, home page)
  *
- *   node scripts/geo/build-world.mjs
+ *   curl -L -o ne_50m_admin_0_countries.geojson https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson
+ *   node scripts/geo/build-world.mjs ne_50m_admin_0_countries.geojson
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { feature, mesh } from "topojson-client";
 import { createJiti } from "jiti";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..");
-const require = createRequire(import.meta.url);
 const jiti = createJiti(import.meta.url, { alias: { "@": join(root, "src") } });
 const { project, WORLD_W, WORLD_H } = await jiti.import(
   join(root, "src/games/fact-map/projection.ts"),
 );
 
-const land = JSON.parse(
-  readFileSync(require.resolve("world-atlas/land-50m.json"), "utf8"),
-);
-const countries = JSON.parse(
-  readFileSync(require.resolve("world-atlas/countries-50m.json"), "utf8"),
+const file = process.argv[2];
+if (!file)
+  throw new Error(
+    "usage: node scripts/geo/build-world.mjs <ne_50m_admin_0_countries.geojson>",
+  );
+const countries = JSON.parse(readFileSync(file, "utf8")).features.filter(
+  (f) => f.properties.NAME !== "Antarctica",
 );
 
 /** Douglas–Peucker on a projected polyline. */
@@ -37,27 +38,21 @@ function simplify(pts, tol) {
   const keep = new Uint8Array(pts.length);
   keep[0] = keep[pts.length - 1] = 1;
   const stack = [[0, pts.length - 1]];
-  const t2 = tol * tol;
   while (stack.length) {
     const [a, b] = stack.pop();
     const [ax, ay] = pts[a];
     const [bx, by] = pts[b];
-    const dx = bx - ax;
-    const dy = by - ay;
-    const len2 = dx * dx + dy * dy;
-    let best = -1;
-    let bestD = t2;
+    const dx = bx - ax,
+      dy = by - ay,
+      len2 = dx * dx + dy * dy;
+    let best = -1,
+      bestD = tol * tol;
     for (let i = a + 1; i < b; i++) {
       const [px, py] = pts[i];
-      let d;
-      if (len2 === 0) d = (px - ax) ** 2 + (py - ay) ** 2;
-      else {
-        const t = Math.max(
-          0,
-          Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2),
-        );
-        d = (px - ax - t * dx) ** 2 + (py - ay - t * dy) ** 2;
-      }
+      const t = len2
+        ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2))
+        : 0;
+      const d = (px - ax - t * dx) ** 2 + (py - ay - t * dy) ** 2;
       if (d > bestD) {
         bestD = d;
         best = i;
@@ -70,101 +65,96 @@ function simplify(pts, tol) {
   }
   return pts.filter((_, i) => keep[i]);
 }
-
 function area(pts) {
   let s = 0;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++)
     s += (pts[j][0] + pts[i][0]) * (pts[j][1] - pts[i][1]);
   return Math.abs(s / 2);
 }
-
 const fmt = (n, dp) => {
   const s = n.toFixed(dp);
   // Trim trailing zeros of the DECIMALS only: "120" must stay "120".
   return (s.includes(".") ? s.replace(/\.?0+$/, "") : s).replace(/^-0$/, "0");
 };
-
-/** Rings → SVG path; relative commands keep it compact. */
-function toPath(lines, { tol, dp, closed, minArea = 0 }) {
+/** Rings → compact SVG path with relative commands. */
+function toPath(rings, { tol, dp, minArea }) {
   let d = "";
-  let kept = 0;
-  for (const line of lines) {
-    const projected = line.map(([lon, lat]) => project(lon, lat));
-    if (closed && area(projected) < minArea) continue;
+  for (const ring of rings) {
+    const projected = ring.map(([lon, lat]) => project(lon, lat));
+    if (area(projected) < minArea) continue;
     const s = simplify(projected, tol);
-    if (s.length < (closed ? 4 : 2)) continue;
-    kept++;
-    let [x0, y0] = s[0];
-    let rx = Number(fmt(x0, dp));
-    let ry = Number(fmt(y0, dp));
-    d += `M${fmt(x0, dp)} ${fmt(y0, dp)}`;
-    for (let i = 1; i < s.length - (closed ? 1 : 0); i++) {
-      const nx = Number(fmt(s[i][0], dp));
-      const ny = Number(fmt(s[i][1], dp));
-      const ddx = Number((nx - rx).toFixed(dp));
-      const ddy = Number((ny - ry).toFixed(dp));
+    if (s.length < 4) continue;
+    let rx = Number(fmt(s[0][0], dp)),
+      ry = Number(fmt(s[0][1], dp));
+    d += `M${fmt(s[0][0], dp)} ${fmt(s[0][1], dp)}`;
+    for (let i = 1; i < s.length - 1; i++) {
+      const nx = Number(fmt(s[i][0], dp)),
+        ny = Number(fmt(s[i][1], dp));
+      const ddx = Number((nx - rx).toFixed(dp)),
+        ddy = Number((ny - ry).toFixed(dp));
       if (ddx === 0 && ddy === 0) continue;
       d += `l${fmt(ddx, dp)}${ddy < 0 ? "" : " "}${fmt(ddy, dp)}`;
       rx = nx;
       ry = ny;
     }
-    if (closed) d += "z";
+    d += "z";
   }
-  return { d, kept };
+  return d;
 }
+const ringsOf = (g) =>
+  (g.type === "Polygon" ? [g.coordinates] : g.coordinates).flatMap((p) => p);
 
-const landGeom = feature(land, land.objects.land);
-const rings = [];
-for (const f of landGeom.features ?? [landGeom]) {
-  const g = f.geometry ?? f;
-  const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
-  for (const poly of polys) for (const ring of poly) rings.push(ring);
+const groups = Array.from({ length: 7 }, () => []);
+for (const f of countries) {
+  const c = Math.min(7, Math.max(1, f.properties.MAPCOLOR7 || 1));
+  groups[c - 1].push(...ringsOf(f.geometry));
 }
-const borders = mesh(countries, countries.objects.countries, (a, b) => a !== b);
+const COUNTRY_PATHS = groups.map((rings) =>
+  toPath(rings, { tol: 0.025, dp: 2, minArea: 0.0015 }),
+);
 
-const LAND = toPath(rings, {
-  tol: 0.025,
-  dp: 2,
-  closed: true,
-  minArea: 0.0015,
-});
-const BORDERS = toPath(borders.coordinates, {
-  tol: 0.03,
-  dp: 2,
-  closed: false,
-});
-const COVER = toPath(rings, { tol: 1.4, dp: 0, closed: true, minArea: 8 });
+const LABELS = countries
+  .filter((f) => f.properties.NAME_IT && Number.isFinite(f.properties.LABEL_X))
+  .map((f) => {
+    const [x, y] = project(f.properties.LABEL_X, f.properties.LABEL_Y);
+    return [
+      f.properties.NAME_IT,
+      +x.toFixed(2),
+      +y.toFixed(2),
+      +Number(f.properties.MIN_LABEL ?? 5).toFixed(1),
+    ];
+  })
+  .sort((a, b) => a[3] - b[3]);
+
+const COVER = toPath(
+  countries.flatMap((f) => ringsOf(f.geometry)),
+  { tol: 1.8, dp: 0, minArea: 14 },
+);
 
 writeFileSync(
   join(root, "src/games/fact-map/data/world.ts"),
   `// GENERATED by scripts/geo/build-world.mjs — do not edit by hand.
 //
-// Natural Earth 1:50m land and country borders (public domain,
-// naturalearthdata.com), from the world-atlas package (ISC). Projected with
-// Equal Earth into a ${WORLD_W} × ${WORLD_H.toFixed(2)} box (projection.ts) and
-// simplified to ~2–3 km; islands down to ~20 km² are kept. Lakes are not
-// cut out of the land: the 1:50m country data does not separate them.
+// Political map from Natural Earth 1:50m admin-0 countries (public domain,
+// naturalearthdata.com). Miller projection (projection.ts) in a ${WORLD_W} ×
+// ${WORLD_H.toFixed(2)} box, simplified to ~2–3 km; Antarctica left out.
 
-/** Land and islands, ${LAND.kept} rings. */
-export const LAND_PATH =
-  ${JSON.stringify(LAND.d)};
+/** Countries in seven colour groups: neighbours never share a group. */
+export const COUNTRY_PATHS: readonly string[] = ${JSON.stringify(COUNTRY_PATHS)};
 
-/** Land borders between countries (shared edges only, drawn once). */
-export const BORDERS_PATH =
-  ${JSON.stringify(BORDERS.d)};
+/** [name in Italian, x, y, zoom from which to show it], biggest first. */
+export const COUNTRY_LABELS: readonly (readonly [string, number, number, number])[] = ${JSON.stringify(LABELS)};
 `,
 );
 writeFileSync(
   join(root, "src/components/games/worldCover.ts"),
   `// GENERATED by scripts/geo/build-world.mjs — do not edit by hand.
-// A light outline of the continents for the Atlante cover: Natural Earth
-// 1:50m (public domain) in the same Equal Earth projection as the game,
-// simplified to ~100 km so it costs almost nothing on the home page.
+// The countries for the Atlante cover: Natural Earth 1:50m (public domain)
+// in the same Miller projection as the game, simplified to ~100 km.
 // Box: ${WORLD_W} × ${WORLD_H.toFixed(2)}.
-export const WORLD_COVER_PATH =
-  ${JSON.stringify(COVER.d)};
+export const WORLD_COVER_PATH = ${JSON.stringify(COVER)};
 `,
 );
 console.log(
-  `land rings ${LAND.kept}, ${(LAND.d.length / 1024).toFixed(0)} kB; borders ${(BORDERS.d.length / 1024).toFixed(0)} kB; cover ${(COVER.d.length / 1024).toFixed(1)} kB`,
+  `countries ${countries.length}, ${(COUNTRY_PATHS.join("").length / 1024).toFixed(0)} kB; labels ${LABELS.length}; cover ${(COVER.length / 1024).toFixed(1)} kB`,
 );

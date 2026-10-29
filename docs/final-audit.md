@@ -55,7 +55,7 @@ Abissi (Krillion) è **pre-autorata**, non misurata sulla folla come
 nell'originale. Taglio (GeoSlice) usa dal 29/10 **dati reali**: contorni e città
 di Natural Earth, popolazione delle aree urbane (stime, non censimenti); Grecia
 e Argentina sono escluse perché una sola città supera metà della popolazione
-considerata. Atlante usa Natural Earth 1:50m (laghi non ritagliati). Le sagome
+considerata. Atlante è una cartina politica da Natural Earth 1:50m: Stati colorati, nomi in italiano, proiezione di Miller, Antartide esclusa (laghi non ritagliati). Le sagome
 di In Scala sono disegnate in metri con proporzioni pubbliche dove esistono,
 semplificate; **il catalogo non contiene animali**.
 

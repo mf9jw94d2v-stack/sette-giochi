@@ -1,4 +1,5 @@
 import {
+  useMemo,
   useCallback,
   useEffect,
   useRef,
@@ -19,7 +20,8 @@ import {
   type SafeArea,
   type View,
 } from "../geo";
-import { graticulePath, outlinePath } from "../projection";
+import type { PoliticalMap } from "../data/politicalMap";
+import { graticulePath, outlinePath, WORLD_W } from "../projection";
 
 const OUTLINE = outlinePath();
 const GRATICULE = graticulePath(30);
@@ -50,16 +52,14 @@ export interface MapFocus {
  * screen pixel, so markers keep the same on-screen size at any zoom.
  */
 export function WorldMap({
-  landPath,
-  bordersPath,
+  world,
   focus,
   onPick,
   label,
   children,
 }: {
-  landPath: string | null;
-  /** Country borders, drawn once each, under the coastline. */
-  bordersPath?: string | null;
+  /** The political map: countries in colour groups, and their names. */
+  world: PoliticalMap | null;
   focus: MapFocus;
   /** Null when the map should not accept a pin (during a reveal). */
   onPick: ((lon: number, lat: number) => void) | null;
@@ -236,6 +236,43 @@ export function WorldMap({
   }
 
   const u = view.w / size.w;
+
+  // Which names fit: a name shows from Natural Earth's own zoom for it, and
+  // only where it does not run into one already placed.
+  const labels = useMemo(() => {
+    if (!world) return [];
+    const zoom = 1.6 + Math.log2(WORLD_W / view.w);
+    const placed: [number, number, number, number][] = [];
+    const out: [string, number, number, number][] = [];
+    for (const [name, x, y, minZoom] of world.labels) {
+      if (minZoom > zoom + 0.7) break;
+      const fs = u * (minZoom < 3 ? 13 : 11.5);
+      const w = name.length * fs * 0.56;
+      const box: [number, number, number, number] = [
+        x - w / 2,
+        y - fs * 0.6,
+        x + w / 2,
+        y + fs * 0.6,
+      ];
+      if (
+        box[2] < view.x ||
+        box[0] > view.x + view.w ||
+        box[3] < view.y ||
+        box[1] > view.y + view.h
+      )
+        continue;
+      if (
+        placed.some(
+          (b) =>
+            box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1],
+        )
+      )
+        continue;
+      placed.push(box);
+      out.push([name, x, y, fs]);
+    }
+    return out;
+  }, [world, view, u]);
   const cx = view.x + view.w / 2;
   const cy = view.y + view.h / 2;
 
@@ -278,33 +315,49 @@ export function WorldMap({
           stroke="var(--fm-coast)"
           strokeWidth={u}
         />
-        {/* Graticule every 30°, curved with the projection: the quiet grid
-            of a printed atlas. */}
+        {/* Graticule every 30°: the quiet grid of a printed atlas. */}
         <path
           d={GRATICULE}
           stroke="var(--fm-ocean-line)"
           strokeWidth={u}
           fill="none"
         />
-        {landPath && (
+        {/* Each country in one of seven colours; neighbours never match. */}
+        {world?.countries.map((d, i) => (
           <path
-            d={landPath}
-            fill="var(--fm-land)"
-            stroke="var(--fm-coast)"
-            strokeWidth={u * 0.9}
-            strokeLinejoin="round"
-          />
-        )}
-        {bordersPath && (
-          <path
-            d={bordersPath}
-            fill="none"
+            key={i}
+            d={d}
+            fill={`var(--fm-c${i + 1})`}
             stroke="var(--fm-border)"
-            strokeWidth={u * 0.7}
+            strokeWidth={u * 0.8}
             strokeLinejoin="round"
-            strokeLinecap="round"
           />
-        )}
+        ))}
+        {/* Country names, bigger countries first, more as you zoom in. */}
+        <g
+          aria-hidden="true"
+          style={{ pointerEvents: "none" }}
+          fontFamily="Outfit, Inter, sans-serif"
+          fontWeight={600}
+          textAnchor="middle"
+          fill="var(--fm-label)"
+          stroke="var(--fm-label-halo)"
+          strokeWidth={u * 3}
+          paintOrder="stroke"
+          strokeLinejoin="round"
+        >
+          {labels.map(([name, x, y, fs]) => (
+            <text
+              key={name}
+              x={x}
+              y={y}
+              fontSize={fs}
+              dominantBaseline="middle"
+            >
+              {name}
+            </text>
+          ))}
+        </g>
         {children?.(u)}
         {keyboard && onPick && (
           <g stroke="var(--fm-ink)" strokeWidth={u * 1.5} aria-hidden="true">
@@ -314,7 +367,7 @@ export function WorldMap({
         )}
       </svg>
 
-      {!landPath && (
+      {!world && (
         <p className="fm-label pointer-events-none absolute inset-0 grid place-items-center">
           Caricamento della mappa…
         </p>

@@ -40,9 +40,11 @@ export function fitWorld(aspect: number): View {
  */
 export function playView(aspect: number): View {
   if (!(aspect > 0) || aspect >= 1.2) return fitWorld(aspect);
-  const h = project(0, -56)[1] - project(0, 72)[1];
+  const h = Math.min(WORLD_H, project(0, -56)[1] - project(0, 72)[1]);
   const w = h * aspect;
-  const [cx, cy] = project(15, (72 - 56) / 2);
+  const [cx, cy0] = project(15, (72 - 56) / 2);
+  // Never past the top or bottom edge of the map.
+  const cy = Math.min(WORLD_H - h / 2, Math.max(h / 2, cy0));
   return clampView({ x: cx - w / 2, y: cy - h / 2, w, h }, aspect);
 }
 

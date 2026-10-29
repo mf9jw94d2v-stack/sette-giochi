@@ -4,11 +4,21 @@
    Crisp cartographic panels: small radius, hairline rules, spaced capitals. */
 
 .fm {
-  --fm-ocean: #d9e2e8;
+  --fm-ocean: #cbdfeb;
+  /* Political map: seven country colours (neighbours never share one). */
+  --fm-c1: #f1d9a6;
+  --fm-c2: #d3e3a9;
+  --fm-c3: #f0c2a9;
+  --fm-c4: #ddcbe7;
+  --fm-c5: #f5e6a6;
+  --fm-c6: #c3ddca;
+  --fm-c7: #eac9c1;
+  --fm-label: #3a332a;
+  --fm-label-halo: rgba(255, 255, 255, 0.75);
   --fm-ocean-line: rgba(43, 39, 34, 0.07);
   --fm-land: #ebe2cf;
   --fm-coast: #a3957a;
-  --fm-border: rgba(110, 96, 74, 0.55);
+  --fm-border: rgba(90, 80, 66, 0.7);
   --fm-void: #c9d3da;
   --fm-panel: rgba(250, 247, 240, 0.94);
   --fm-paper: #faf7f0;
@@ -202,11 +212,20 @@
    cream labels. The pin keeps its orange and the truth its green, both
    lifted for the dark water. */
 .dark .fm {
-  --fm-ocean: #0e1a24;
+  --fm-ocean: #0c1923;
+  --fm-c1: #4b4332;
+  --fm-c2: #39462f;
+  --fm-c3: #4e3b33;
+  --fm-c4: #40374a;
+  --fm-c5: #4b4831;
+  --fm-c6: #30453b;
+  --fm-c7: #49393b;
+  --fm-label: #f1ebdf;
+  --fm-label-halo: rgba(8, 14, 20, 0.85);
   --fm-ocean-line: rgba(236, 230, 217, 0.07);
   --fm-land: #2a2f28;
   --fm-coast: #7a8571;
-  --fm-border: rgba(170, 180, 160, 0.38);
+  --fm-border: rgba(236, 230, 217, 0.42);
   --fm-void: #081118;
   --fm-panel: rgba(20, 24, 28, 0.94);
   --fm-paper: #171b1f;

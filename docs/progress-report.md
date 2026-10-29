@@ -2,6 +2,17 @@
 
 Reverse-chronological log of real, verified increments.
 
+## 2026-10-29 (5) — Atlante: cartina politica
+
+Su richiesta, la mappa di Atlante è ora una classica cartina politica:
+rettangolare (proiezione di Miller, da 58°S a 84°N, senza Antartide: nessun
+luogo del gioco è a sud di 34°S), ogni Stato in uno dei sette colori di
+Natural Earth pensati perché paesi confinanti non si somiglino, nomi in
+italiano (`NAME_IT`) che compaiono man mano che si ingrandisce, dai paesi
+più grandi ai più piccoli, senza sovrapporsi. Fonte: Natural Earth 1:50m
+admin-0 countries (pubblico dominio). Verificata nei due temi, desktop e
+mobile; proiezione e inversa testate.
+
 ## 2026-10-29 (4) — Piattaforma scura, nuove anteprime, mappe e sagome vere
 
 - **Tema scuro predefinito** per tutti (il chiaro resta nelle impostazioni),

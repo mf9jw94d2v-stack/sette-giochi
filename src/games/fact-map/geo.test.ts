@@ -40,7 +40,10 @@ describe("playView", () => {
   it("fills a phone's height with the inhabited latitudes", () => {
     const v = playView(0.5);
     // From 72°N to 56°S, in projected units.
-    expect(v.h).toBeCloseTo(project(0, -56)[1] - project(0, 72)[1], 6);
+    expect(v.h).toBeCloseTo(
+      Math.min(WORLD_H, project(0, -56)[1] - project(0, 72)[1]),
+      6,
+    );
     expect(v.y).toBeGreaterThanOrEqual(0);
     expect(v.y + v.h).toBeLessThanOrEqual(WORLD_H);
   });
@@ -110,7 +113,7 @@ describe("frame with panels", () => {
     const safe = { top: 0.12, bottom: 0.34 };
     const v = frame(pts, 0.93, 10, 28, safe);
     for (const [, lat] of pts) {
-      const fy = (90 - lat - v.y) / v.h;
+      const fy = (project(0, lat)[1] - v.y) / v.h;
       expect(fy).toBeGreaterThan(safe.top);
       expect(fy).toBeLessThan(1 - safe.bottom);
     }

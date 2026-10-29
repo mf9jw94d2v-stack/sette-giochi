@@ -1,41 +1,39 @@
 import { describe, expect, it } from "vitest";
-import { geoEqualEarth } from "d3-geo";
-import { project, unproject, WORLD_H, WORLD_W } from "./projection";
+import {
+  LAT_MAX,
+  LAT_MIN,
+  project,
+  unproject,
+  WORLD_H,
+  WORLD_W,
+} from "./projection";
 
-describe("Equal Earth projection", () => {
-  it("matches d3-geo's reference implementation", () => {
-    // d3 projection scaled to the same box: compare relative positions.
-    const d3 = geoEqualEarth().fitSize([WORLD_W, WORLD_H], { type: "Sphere" });
-    for (const [lon, lat] of [
-      [0, 0],
-      [12.5, 41.9],
-      [-74, 40.7],
-      [139.7, 35.7],
-      [-58.4, -34.6],
-      [151.2, -33.9],
-      [179, 70],
-    ]) {
-      const [x, y] = project(lon, lat);
-      const [rx, ry] = d3([lon, lat])!;
-      expect(Math.abs(x - rx)).toBeLessThan(0.05);
-      expect(Math.abs(y - ry)).toBeLessThan(0.05);
-    }
+describe("Miller projection", () => {
+  it("is a rectangle: same x for a meridian, same y for a parallel", () => {
+    expect(project(12.5, 0)[0]).toBeCloseTo(project(12.5, 60)[0], 9);
+    expect(project(-70, 45)[1]).toBeCloseTo(project(100, 45)[1], 9);
+    expect(project(-180, LAT_MAX)).toEqual([0, 0]);
+    const [x, y] = project(180, LAT_MIN);
+    expect(x).toBeCloseTo(WORLD_W, 9);
+    expect(y).toBeCloseTo(WORLD_H, 9);
+  });
+
+  it("matches Miller's formula (y = 1.25 ln tan(π/4 + 0.4φ))", () => {
+    const yOf = (lat: number) =>
+      1.25 * Math.log(Math.tan(Math.PI / 4 + 0.4 * ((lat * Math.PI) / 180)));
+    const k = WORLD_W / (2 * Math.PI);
+    expect(project(0, 45)[1] - project(0, 0)[1]).toBeCloseTo(-yOf(45) * k, 9);
+    expect(yOf(45)).toBeCloseTo(0.8428, 3);
   });
 
   it("inverts exactly, so a click lands where it points", () => {
     for (let lon = -175; lon <= 175; lon += 25) {
-      for (let lat = -80; lat <= 80; lat += 20) {
+      for (let lat = -55; lat <= 80; lat += 15) {
         const [x, y] = project(lon, lat);
         const back = unproject(x, y);
-        expect(back.lon).toBeCloseTo(lon, 6);
-        expect(back.lat).toBeCloseTo(lat, 6);
+        expect(back.lon).toBeCloseTo(lon, 9);
+        expect(back.lat).toBeCloseTo(lat, 9);
       }
     }
-  });
-
-  it("brings clicks outside the outline back to the edge", () => {
-    const corner = unproject(0, 0);
-    expect(corner.lon).toBe(-180);
-    expect(corner.lat).toBeCloseTo(90, 3);
   });
 });

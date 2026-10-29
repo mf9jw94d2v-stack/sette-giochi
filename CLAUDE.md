@@ -33,7 +33,7 @@ Optional Supabase backend (Postgres + Auth + 2 Edge Functions). Without
 After changing `src/backend`, `src/games/**/engine|generator|answers` or
 `replay.ts`: `npm run functions:build`. Preview images:
 `node scripts/og/capture.mjs`; icons: `node scripts/og/icons.mjs`.
-Generated data (never edit by hand): Atlante map `node scripts/geo/build-world.mjs`;
+Generated data (never edit by hand): Atlante political map `node scripts/geo/build-world.mjs <ne_50m_admin_0_countries.geojson>`;
 Taglio regions `node scripts/geo/build-geoslice.mjs <ne_10m_populated_places_simple.geojson>`
 (source URL in the script; changing cities changes `GEO_GENERATOR_VERSION`);
 In Scala silhouettes `node scripts/silhouettes/build.mjs`. Dark is the default theme.
