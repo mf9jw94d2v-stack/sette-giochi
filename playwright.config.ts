@@ -24,6 +24,9 @@ export default defineConfig({
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: `http://localhost:${PORT}`,
+    // The service worker (public/sw.js) would answer requests itself, out of
+    // reach of the tests' network stand-ins. Its behaviour is tested apart.
+    serviceWorkers: "block",
     trace: "on-first-retry",
   },
   projects: [

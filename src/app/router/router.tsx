@@ -184,8 +184,21 @@ const accountRoutes: RouteObject[] = [
   })),
 ];
 
+/**
+ * Link-preview images (Open Graph): a page photographed by
+ * scripts/og/capture.mjs. Development only, never in a production build.
+ */
+const ogRoutes: RouteObject[] = import.meta.env.DEV
+  ? [
+      lazyRoute("/og/:slug", async () => ({
+        default: (await import("@/features/og/OgCard")).OgCard,
+      })),
+    ]
+  : [];
+
 export const router = createBrowserRouter(
   [
+    ...ogRoutes,
     {
       path: "/",
       element: <RootLayout />,

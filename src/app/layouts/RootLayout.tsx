@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation, useMatches } from "react-router-dom";
 import { Navbar } from "@/components/navigation/Navbar";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { SaveNotice } from "@/features/sync/SaveNotice";
+import { useDocumentTitle } from "./useDocumentTitle";
 import { GuestImportBanner } from "@/features/sync/GuestImportBanner";
 import { SessionExpiredBanner } from "@/features/sync/SessionExpiredBanner";
 
@@ -12,6 +13,7 @@ export interface RouteHandle {
 
 export function RootLayout() {
   const { pathname } = useLocation();
+  useDocumentTitle();
   // Game pages are their own places: no reading-width column, no page
   // padding, no footer. Everything else keeps the comfortable 72rem column.
   const immersive = useMatches().some(

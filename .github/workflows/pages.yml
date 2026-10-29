@@ -40,10 +40,13 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_DAILY_TIMEZONE: UTC
 
-      # GitHub Pages has no rewrite rules: serving the app as the 404 page
-      # lets direct links like /games/krillion open the right screen.
-      - name: Single-page fallback
-        run: cp dist/index.html dist/404.html
+      # GitHub Pages has no rewrite rules: one real page per address (with
+      # its own title and link preview), a sitemap, and the app as 404 page
+      # for everything else. See scripts/build/static-pages.mjs.
+      - name: Static pages, previews and sitemap
+        run: node scripts/build/static-pages.mjs
+        env:
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

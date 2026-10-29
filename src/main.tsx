@@ -11,3 +11,17 @@ createRoot(rootEl).render(
     <App />
   </StrictMode>,
 );
+
+// Installable and usable offline (public/sw.js). Production builds only: in
+// development a cached page would hide the code being edited.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    void navigator.serviceWorker
+      .register(`${import.meta.env.BASE_URL}sw.js`, {
+        scope: import.meta.env.BASE_URL,
+      })
+      .catch(() => {
+        /* no offline mode; the site works the same online */
+      });
+  });
+}
