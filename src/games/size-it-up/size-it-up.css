@@ -1,0 +1,328 @@
+/* ── Size It Up · «La tavola naturalistica» ────────────────────────────────
+   Local design system, scoped under .siu, loaded only with this chunk.
+   An encyclopedia plate: sand paper ruled with a faint grid, indigo for the
+   known object, vermilion for the one being judged, green for the truth
+   (verified palette). Archivo, condensed and heavy, for the museum labels.
+   The plate IS the page: the stage fills it, the captions sit under it like
+   figure labels, the controls are docked along the bottom edge. */
+
+.siu {
+  --siu-paper: #fffaf4;
+  --siu-plate: #fff8ef;
+  --siu-ink: #3a2f1c;
+  /* Darker than the stage's decorative brown so small text keeps 4.5:1. */
+  --siu-muted: #6b5c47;
+  --siu-rule: #cfb49c;
+  --siu-track: #eadfce;
+  --siu-blue: #1e3a8a;
+  --siu-red: #ab341f;
+  --siu-red-deep: #8f2a18;
+  --siu-good: #15803d;
+  --siu-good-soft: #dcf5e4;
+  --siu-red-soft: #f6dcd3;
+  --siu-blue-soft: #dbe3f7;
+  /* Decorative brown of the stage drawing (rulers, scale text). */
+  --siu-deco: #8a7a63;
+  --siu-on-red: #ffffff;
+  --siu-dock-shadow: rgba(58, 47, 28, 0.35);
+  --siu-focus: rgba(30, 58, 138, 0.35);
+  --siu-dialog-shadow: rgba(58, 47, 28, 0.5);
+  --siu-backdrop: rgba(58, 47, 28, 0.45);
+
+  --siu-radius: 3px;
+
+  background: var(--siu-plate);
+  color: var(--siu-ink);
+  font-family: Archivo, Inter, system-ui, sans-serif;
+  font-stretch: 100%;
+  color-scheme: light;
+}
+
+.siu :focus-visible {
+  outline: 2px solid var(--siu-blue);
+  outline-offset: 2px;
+}
+
+/* ── type ── */
+.siu-title {
+  font-weight: 800;
+  font-stretch: 75%;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.siu-label {
+  font-size: 11px;
+  font-weight: 600;
+  font-stretch: 75%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--siu-muted);
+}
+.siu-num {
+  font-weight: 800;
+  font-stretch: 75%;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── header ── */
+.siu-head {
+  border-bottom: 1px solid var(--siu-rule);
+  background: var(--siu-paper);
+}
+
+/* ── buttons ── */
+.siu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0 1.75rem;
+  border-radius: var(--siu-radius);
+  background: var(--siu-red);
+  color: var(--siu-on-red);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.siu-btn:hover {
+  background: var(--siu-red-deep);
+}
+.siu-btn:active {
+  transform: translateY(1px);
+}
+.siu-btn-ghost {
+  background: transparent;
+  color: var(--siu-ink);
+  box-shadow: inset 0 0 0 1px var(--siu-rule);
+}
+.siu-btn-ghost:hover {
+  background: var(--siu-track);
+}
+
+/* Square tools: the stage's zoom buttons, the ± steps, help and sound. */
+.siu-tool {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--siu-radius);
+  background: var(--siu-paper);
+  color: var(--siu-ink);
+  box-shadow: inset 0 0 0 1px var(--siu-rule);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.siu-tool:hover {
+  background: var(--siu-track);
+}
+.siu-tool[aria-pressed="true"],
+.siu-tool[data-active="true"] {
+  background: var(--siu-ink);
+  color: var(--siu-paper);
+  box-shadow: none;
+}
+.siu-tool:disabled {
+  opacity: 0.4;
+}
+.siu-tool-lg {
+  width: 52px;
+  height: 52px;
+}
+
+.siu-tab {
+  min-height: 36px;
+  padding: 0 0.75rem;
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 75%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--siu-muted);
+  border-bottom: 2px solid transparent;
+}
+.siu-tab[aria-selected="true"] {
+  color: var(--siu-ink);
+  border-bottom-color: var(--siu-red);
+}
+@media (pointer: coarse) {
+  .siu-tab {
+    min-height: 44px;
+  }
+}
+
+/* ── figure captions, museum-label style ── */
+.siu-caption {
+  border-left: 4px solid var(--siu-cap, var(--siu-ink));
+  padding: 0.125rem 0 0.125rem 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+.siu-caption strong {
+  font-weight: 700;
+  color: var(--siu-cap, var(--siu-ink));
+}
+
+/* ── the dock ── */
+.siu-dock {
+  border-top: 1px solid var(--siu-rule);
+  background: var(--siu-paper);
+  box-shadow: 0 -8px 24px -18px var(--siu-dock-shadow);
+}
+
+/* The logarithmic slider: a ruled track and a vermilion thumb. */
+.siu-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+}
+.siu-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--siu-rule) 0 1px,
+      transparent 1px 10%
+    ),
+    var(--siu-track);
+}
+.siu-range::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--siu-track);
+}
+.siu-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--siu-red);
+  border: 3px solid var(--siu-paper);
+  box-shadow: 0 0 0 1px var(--siu-red);
+}
+.siu-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--siu-red);
+  border: 3px solid var(--siu-paper);
+}
+.siu-range:focus-visible {
+  outline: none;
+}
+.siu-range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 1px var(--siu-red),
+    0 0 0 5px var(--siu-focus);
+}
+.siu-range:disabled {
+  opacity: 0.4;
+}
+
+/* ── verdict stamps ── */
+.siu-stamp {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 0.625rem;
+  border: 1.5px solid currentColor;
+  border-radius: var(--siu-radius);
+  font-size: 12px;
+  font-weight: 800;
+  font-stretch: 75%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── results: a gallery of plates ── */
+.siu-plate {
+  background: var(--siu-paper);
+  box-shadow: inset 0 0 0 1px var(--siu-rule);
+  border-radius: var(--siu-radius);
+}
+
+/* ── rules dialog ── */
+.siu-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  margin: auto;
+  padding: 1.75rem;
+  border-radius: var(--siu-radius);
+  background: var(--siu-paper);
+  color: var(--siu-ink);
+  font-family: Archivo, Inter, system-ui, sans-serif;
+  box-shadow:
+    inset 0 0 0 1px var(--siu-rule),
+    0 24px 60px -20px var(--siu-dialog-shadow);
+}
+.siu-dialog::backdrop {
+  background: var(--siu-backdrop);
+}
+
+/* ── motion ── */
+.siu-rise {
+  animation: siu-rise 260ms var(--ease-out) both;
+}
+@keyframes siu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .siu-rise {
+    animation: none;
+  }
+  .siu-btn,
+  .siu-tool {
+    transition: none;
+  }
+}
+
+/* The global stylesheet sets a display face on every heading; inside this
+   game headings follow the game's own type instead. Layered, so the game's
+   classes and Tailwind utilities still win. */
+@layer base {
+  .siu :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Dark theme · «La tavola in negativo» ──────────────────────────────────
+   The plate as a photographic negative: dark umber paper, cream labels, a
+   sand grid. Indigo and vermilion are lifted to light periwinkle and coral
+   so both silhouettes still read at a glance; green stays the truth. */
+.dark .siu {
+  --siu-paper: #171310;
+  --siu-plate: #1d1813;
+  --siu-ink: #f2e8d7;
+  --siu-muted: #b9a990;
+  --siu-rule: #5b4b39;
+  --siu-track: #3a3028;
+  --siu-blue: #93a9f0;
+  --siu-red: #f2765c;
+  --siu-red-deep: #f7957f;
+  --siu-good: #4ade80;
+  --siu-good-soft: #173a26;
+  --siu-red-soft: #3d2119;
+  --siu-blue-soft: #252e4b;
+  --siu-deco: #a8987f;
+  --siu-on-red: #1d0a05;
+  --siu-dock-shadow: rgba(0, 0, 0, 0.6);
+  --siu-focus: rgba(147, 169, 240, 0.45);
+  --siu-dialog-shadow: rgba(0, 0, 0, 0.7);
+  --siu-backdrop: rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}

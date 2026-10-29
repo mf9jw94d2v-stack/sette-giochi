@@ -1,0 +1,60 @@
+name: Pubblica su GitHub Pages
+
+# Builds the site and publishes it on GitHub Pages at every push to main.
+# The two Supabase values are the BROWSER-SAFE ones (URL and publishable key),
+# kept as repository variables (Settings → Secrets and variables → Actions →
+# Variables), not in the code. Without them the site is published guest-only.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # The site lives under /<repository>/ on GitHub Pages.
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_DAILY_TIMEZONE: UTC
+
+      # GitHub Pages has no rewrite rules: serving the app as the 404 page
+      # lets direct links like /games/krillion open the right screen.
+      - name: Single-page fallback
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

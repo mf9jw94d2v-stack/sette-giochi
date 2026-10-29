@@ -1,0 +1,197 @@
+/* ── Plain · «Il volo notturno» ────────────────────────────────────────────
+   Local design system, scoped under .pl, loaded only with this chunk.
+   Minimal on purpose (verified: #0b0d12, lime #d2fa4b, Geist, a huge hero
+   title), but minimal is not empty: the question is set very large, there
+   is one field, one accent, and an altitude rail the full height of the
+   page. No cards, no boxes, no rounded panels. */
+
+.pl {
+  --pl-night: #0b0d12;
+  --pl-surface: #151922;
+  --pl-line: rgba(243, 245, 249, 0.1);
+  --pl-text: #f3f5f9;
+  --pl-muted: #9ba3b4;
+  --pl-lime: #d2fa4b;
+  --pl-lime-ink: #10140a;
+  --pl-miss: #ff8a7a;
+  --pl-placeholder: rgba(243, 245, 249, 0.18);
+  --pl-backdrop: rgba(11, 13, 18, 0.75);
+
+  color-scheme: dark;
+
+  background: var(--pl-night);
+  color: var(--pl-text);
+  font-family: Geist, Inter, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.pl-mono {
+  font-family: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+.pl-label {
+  font-family: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--pl-muted);
+}
+
+.pl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0 1.5rem;
+  border-radius: 8px;
+  background: var(--pl-lime);
+  color: var(--pl-lime-ink);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.pl-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.pl-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.pl-btn-text {
+  background: transparent;
+  color: var(--pl-muted);
+  padding: 0 0.75rem;
+}
+.pl-btn-text:hover {
+  color: var(--pl-text);
+}
+
+.pl-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: var(--pl-muted);
+}
+.pl-icon:hover {
+  color: var(--pl-text);
+  background: var(--pl-surface);
+}
+@media (min-width: 640px) {
+  .pl-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.pl-tab {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--pl-muted);
+  border-bottom: 1px solid transparent;
+}
+.pl-tab[aria-selected="true"] {
+  color: var(--pl-text);
+  border-bottom-color: var(--pl-lime);
+}
+
+/* One field, on one line. */
+.pl-field {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  border-bottom: 1px solid var(--pl-line);
+  background: transparent;
+  color: var(--pl-text);
+  font-family: Geist, Inter, sans-serif;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  padding: 0.15em 0;
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.pl-field::placeholder {
+  color: var(--pl-placeholder);
+}
+.pl-field:focus {
+  border-bottom-color: var(--pl-lime);
+}
+.pl .pl-field:focus-visible {
+  outline: none;
+}
+
+.pl :focus-visible {
+  outline: 2px solid var(--pl-lime);
+  outline-offset: 3px;
+}
+
+.pl-plane {
+  transition: bottom 900ms var(--ease-out);
+}
+.pl-trail {
+  transition: height 900ms var(--ease-out);
+}
+
+@keyframes pl-rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+}
+.pl-rise {
+  animation: pl-rise var(--dur-base) var(--ease-out);
+}
+
+.pl-dialog {
+  max-width: min(30rem, calc(100vw - 2rem));
+  padding: 1.75rem;
+  border: 1px solid var(--pl-line);
+  border-radius: 12px;
+  background: var(--pl-surface);
+  color: var(--pl-text);
+  font-family: Geist, Inter, sans-serif;
+}
+.pl-dialog::backdrop {
+  background: var(--pl-backdrop);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-plane,
+  .pl-trail {
+    transition: none;
+  }
+  .pl-rise {
+    animation: none;
+  }
+}
+
+/* The platform styles every h1–h3 in its own display face (@layer base).
+   Inside this game, headings take the game's type instead. Declared in the
+   same layer so it beats that rule, while any class of this game's own —
+   which is unlayered — still beats it. */
+@layer base {
+  .pl :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Light theme · «Il volo diurno» ────────────────────────────────────────
+   Same instruments by day: white sky, black type, and the lime deepened to
+   an olive that stays legible as text and as a fill. */
+:root:not(.dark) .pl {
+  --pl-night: #f4f5f7;
+  --pl-surface: #ffffff;
+  --pl-line: rgba(11, 13, 18, 0.12);
+  --pl-text: #0b0d12;
+  --pl-muted: #4f5767;
+  --pl-lime: #4d7c0f;
+  --pl-lime-ink: #f7fee7;
+  --pl-miss: #c2410c;
+  --pl-placeholder: rgba(11, 13, 18, 0.22);
+  --pl-backdrop: rgba(11, 13, 18, 0.45);
+
+  color-scheme: light;
+}

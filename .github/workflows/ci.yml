@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+# Never grant more than reading the code: nothing here deploys or publishes.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, lint, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      # Reproducible install straight from the lockfile.
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        # ESLint covers the JavaScript only; TypeScript is checked by `tsc`
+        # above. See eslint.config.js for why (typescript-eslint vs TS 7).
+        run: npm run lint
+
+      - name: Formatting
+        run: npx prettier --check .
+
+      # Includes the database tests: migrations, grants and RLS on a real
+      # PostgreSQL (PGlite), with two users, a guest and the service role.
+      - name: Unit, property-based, generator and database tests
+        run: npm test
+
+      # The Deno bundle of src/backend must match its source, and must run
+      # outside Vite (it does in Node: scripts/functions/smoke.mjs).
+      - name: Edge Function bundle is current and runs
+        run: npm run functions:check
+
+      - name: Production build
+        run: npm run build
+
+      - name: Quality report is reproducible
+        run: node scripts/validation/check-quality-report.mjs --days 365 --end 2026-10-28
+
+  e2e:
+    name: End-to-end (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # playwright.config.ts builds the app and serves it with `vite preview`.
+      - name: Run end-to-end tests
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Advisory: report known vulnerabilities without blocking the pipeline on
+      # a transitive advisory nobody can act on today.
+      - run: npm audit --audit-level=high
+        continue-on-error: true

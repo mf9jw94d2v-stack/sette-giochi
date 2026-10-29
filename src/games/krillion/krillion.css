@@ -1,0 +1,242 @@
+/* ── Krillion · «La discesa» ───────────────────────────────────────────────
+   Local design system, scoped under .kr, loaded only with this chunk.
+   The page is the water column: lit at the surface, black at the trench
+   floor (verified: VT323, abyssal black, a prominent depth gauge from the
+   surface to 7000 m). On it sits a sonar terminal — bracketed commands,
+   segmented oxygen, output printed line by line. */
+
+.kr {
+  --kr-surface: #0b3a5b;
+  --kr-mid: #06182a;
+  --kr-abyss: #020409;
+  --kr-text: #e8f1ff;
+  --kr-muted: #8fa9cc;
+  --kr-sonar: #38bdf8;
+  --kr-oxygen: #f59e0b;
+  --kr-line: rgba(56, 189, 248, 0.22);
+  /* Roles that used to borrow the abyss colour, split so the light version
+     can give each its own value. */
+  --kr-on-sonar: #020409;
+  --kr-sonar-hi: #7dd3fc;
+  --kr-panel: #020409;
+  --kr-placeholder: rgba(143, 169, 204, 0.45);
+  --kr-backdrop: rgba(2, 4, 9, 0.8);
+  --kr-glow: rgba(56, 189, 248, 0.55);
+  /* Rarity tiers, from common to the rarest. */
+  --kr-t-plankton: #94a3b8;
+  --kr-t-tooClever: #38bdf8;
+  --kr-t-schooler: #22d3ee;
+  --kr-t-rare: #34d399;
+  --kr-t-deepCut: #a78bfa;
+  --kr-t-krillion: #f472b6;
+
+  color-scheme: dark;
+
+  color: var(--kr-text);
+  font-family: VT323, ui-monospace, monospace;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  background: linear-gradient(
+    180deg,
+    var(--kr-surface) 0%,
+    var(--kr-mid) 38%,
+    var(--kr-abyss) 100%
+  );
+}
+
+.kr-dim {
+  color: var(--kr-muted);
+}
+
+/* Terminal commands: square, bracketed, inverted on hover. */
+.kr-cmd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 48px;
+  padding: 0 1.1rem;
+  border: 2px solid var(--kr-sonar);
+  color: var(--kr-sonar);
+  background: transparent;
+  font-family: VT323, ui-monospace, monospace;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background var(--dur-fast) linear,
+    color var(--dur-fast) linear;
+}
+.kr-cmd:hover:not(:disabled) {
+  background: var(--kr-sonar);
+  color: var(--kr-on-sonar);
+}
+.kr-cmd-solid {
+  background: var(--kr-sonar);
+  color: var(--kr-on-sonar);
+}
+.kr-cmd-solid:hover:not(:disabled) {
+  background: var(--kr-sonar-hi);
+}
+.kr-cmd:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.kr-cmd-quiet {
+  border-color: var(--kr-line);
+  color: var(--kr-muted);
+}
+
+.kr-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--kr-muted);
+  border: 1px solid transparent;
+}
+.kr-icon:hover {
+  color: var(--kr-text);
+  border-color: var(--kr-line);
+}
+
+.kr-tab {
+  padding: 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--kr-muted);
+}
+.kr-tab[aria-selected="true"] {
+  color: var(--kr-abyss);
+  background: var(--kr-sonar);
+}
+
+/* The command line. */
+.kr-prompt {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--kr-text);
+  font-family: VT323, ui-monospace, monospace;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  caret-color: var(--kr-sonar);
+  outline: none;
+  text-transform: uppercase;
+}
+.kr-prompt::placeholder {
+  color: var(--kr-placeholder);
+}
+.kr .kr-prompt:focus-visible {
+  outline: none;
+}
+
+.kr :focus-visible {
+  outline: 2px dashed var(--kr-sonar);
+  outline-offset: 3px;
+}
+
+@keyframes kr-shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  30%,
+  70% {
+    transform: translateX(4px);
+  }
+  50% {
+    transform: translateX(-6px);
+  }
+}
+.kr-reject {
+  animation: kr-shake 360ms linear;
+}
+
+@keyframes kr-print {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.kr-print {
+  animation: kr-print 420ms steps(18, end) both;
+}
+
+.kr-diver {
+  transition: top 900ms var(--ease-out);
+}
+
+@keyframes kr-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.kr-blink {
+  animation: kr-blink 1s steps(1) infinite;
+}
+
+.kr-dialog {
+  max-width: min(32rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 2px solid var(--kr-sonar);
+  background: var(--kr-panel);
+  color: var(--kr-text);
+  font-family: VT323, ui-monospace, monospace;
+  font-size: 1.25rem;
+}
+.kr-dialog::backdrop {
+  background: var(--kr-backdrop);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-reject,
+  .kr-print,
+  .kr-blink {
+    animation: none;
+  }
+  .kr-diver {
+    transition: none;
+  }
+}
+
+/* The platform styles every h1–h3 in its own display face (@layer base).
+   Inside this game, headings take the game's type instead. Declared in the
+   same layer so it beats that rule, while any class of this game's own —
+   which is unlayered — still beats it. */
+@layer base {
+  .kr :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Light theme · «La discesa di giorno» ──────────────────────────────────
+   The same water column in daylight: pale sunlit surface, a deeper blue at
+   the bottom, the terminal printed in navy ink. Tiers keep their order of
+   hues, darkened to stay readable on light water. */
+:root:not(.dark) .kr {
+  --kr-surface: #f0f9ff;
+  --kr-mid: #d4eaf6;
+  --kr-abyss: #a9d0e6;
+  --kr-text: #0b2540;
+  --kr-muted: #365571;
+  --kr-sonar: #075985;
+  --kr-oxygen: #b45309;
+  --kr-line: rgba(3, 105, 161, 0.28);
+  --kr-on-sonar: #f0f9ff;
+  --kr-sonar-hi: #0c4a6e;
+  --kr-panel: #f0f9ff;
+  --kr-placeholder: rgba(54, 85, 113, 0.5);
+  --kr-backdrop: rgba(11, 37, 64, 0.45);
+  --kr-glow: rgba(3, 105, 161, 0.35);
+  --kr-t-plankton: #475569;
+  --kr-t-tooClever: #075985;
+  --kr-t-schooler: #0e7490;
+  --kr-t-rare: #065f46;
+  --kr-t-deepCut: #6d28d9;
+  --kr-t-krillion: #be185d;
+
+  color-scheme: light;
+}

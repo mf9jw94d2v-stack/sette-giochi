@@ -1,0 +1,222 @@
+/* ── GeoSlice · «La console GIS» ───────────────────────────────────────────
+   Local design system, scoped under .gs and loaded only with this chunk.
+   An analysis instrument: near-black field, hairline rules, square corners,
+   squared numerals. Nothing rounded, nothing soft — the opposite of the
+   atlas in Fact Map on purpose, though both games show places. */
+
+.gs {
+  --gs-bg: #060b16;
+  --gs-field: #0a1222;
+  --gs-panel: #0d1527;
+  --gs-rule: #1f2a40;
+  --gs-grid: rgba(148, 163, 184, 0.06);
+  --gs-grid-major: rgba(148, 163, 184, 0.13);
+  --gs-text: #e2e8f0;
+  --gs-muted: #8fa3c2;
+  --gs-a: #22d3ee;
+  --gs-b: #fb923c;
+  --gs-cut: #f8fafc;
+  --gs-ok: #a3e635;
+  --gs-radius: 2px;
+  --gs-cut-hi: #ffffff;
+  --gs-hover: rgba(148, 163, 184, 0.08);
+  --gs-backdrop: rgba(2, 6, 14, 0.7);
+
+  color-scheme: dark;
+
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--gs-bg);
+  color: var(--gs-text);
+}
+
+.gs-num {
+  font-family: "Chakra Petch", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.gs-caption {
+  font-family: "Chakra Petch", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gs-muted);
+}
+
+.gs-rule {
+  border-color: var(--gs-rule);
+}
+
+.gs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0 1.25rem;
+  border-radius: var(--gs-radius);
+  background: var(--gs-cut);
+  color: var(--gs-bg);
+  font-family: "Chakra Petch", ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.gs-btn:hover {
+  background: var(--gs-cut-hi);
+}
+.gs-btn:active {
+  transform: translateY(1px);
+}
+.gs-btn-line {
+  background: transparent;
+  color: var(--gs-text);
+  border: 1px solid var(--gs-rule);
+}
+.gs-btn-line:hover {
+  background: var(--gs-hover);
+}
+
+.gs-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--gs-rule);
+  border-radius: var(--gs-radius);
+  color: var(--gs-muted);
+}
+.gs-icon:hover {
+  color: var(--gs-text);
+}
+@media (min-width: 1024px) {
+  .gs-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.gs-tab {
+  padding: 0.4rem 0.7rem;
+  font-family: "Chakra Petch", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gs-muted);
+  border-radius: var(--gs-radius);
+}
+.gs-tab[aria-selected="true"] {
+  color: var(--gs-bg);
+  background: var(--gs-text);
+}
+
+/* Instrument sliders: a hairline track and a square thumb. */
+.gs-range {
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+}
+.gs-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--gs-rule);
+}
+.gs-range::-moz-range-track {
+  height: 2px;
+  background: var(--gs-rule);
+}
+.gs-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  background: var(--gs-cut);
+  border-radius: 1px;
+}
+.gs-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: var(--gs-cut);
+  border-radius: 1px;
+}
+
+.gs :focus-visible {
+  outline: 2px solid var(--gs-a);
+  outline-offset: 2px;
+}
+
+.gs-field {
+  touch-action: none;
+  cursor: crosshair;
+}
+.gs-field[data-dragging="true"] {
+  cursor: grabbing;
+}
+
+@keyframes gs-tint {
+  from {
+    opacity: 0;
+  }
+}
+.gs-tint {
+  animation: gs-tint var(--dur-slow) var(--ease-out);
+}
+
+.gs-dialog {
+  max-width: min(32rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 1px solid var(--gs-rule);
+  border-radius: var(--gs-radius);
+  background: var(--gs-panel);
+  color: var(--gs-text);
+}
+.gs-dialog::backdrop {
+  background: var(--gs-backdrop);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-tint {
+    animation: none;
+  }
+}
+
+/* The platform styles every h1–h3 in its own display face (@layer base).
+   Inside this game, headings take the game's type instead. Declared in the
+   same layer so it beats that rule, while any class of this game's own —
+   which is unlayered — still beats it. */
+@layer base {
+  .gs :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Light theme · «La console in luce» ────────────────────────────────────
+   The analysis sheet printed on white: slate ink, hairline grid, the two
+   sides kept cyan and orange, deep enough to read on paper. Still square,
+   still Chakra Petch. */
+:root:not(.dark) .gs {
+  --gs-bg: #eef2f7;
+  --gs-field: #ffffff;
+  --gs-panel: #f8fafc;
+  --gs-rule: #cbd5e1;
+  --gs-grid: rgba(15, 23, 42, 0.05);
+  --gs-grid-major: rgba(15, 23, 42, 0.11);
+  --gs-text: #0f172a;
+  --gs-muted: #475569;
+  --gs-a: #0e7490;
+  --gs-b: #c2410c;
+  --gs-cut: #0f172a;
+  --gs-ok: #3f6212;
+  --gs-cut-hi: #1e293b;
+  --gs-hover: rgba(15, 23, 42, 0.05);
+  --gs-backdrop: rgba(15, 23, 42, 0.4);
+
+  color-scheme: light;
+}

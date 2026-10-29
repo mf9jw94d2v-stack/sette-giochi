@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+/* Class-based dark mode: toggled by adding `.dark` on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Palette ────────────────────────────────────────────────────────────────
+   The seven games each own a loud colour world. The shell deliberately does
+   not compete: warm graphite + brass, so every game cover on it reads as its own
+   place. Three surface levels give real depth instead of card-on-same-colour. */
+:root {
+  --background: hsl(40 9% 96%);
+  --surface: hsl(40 14% 99%);
+  --surface-2: hsl(40 10% 93%);
+  --foreground: hsl(30 8% 12%);
+  --muted: hsl(40 9% 91%);
+  --muted-foreground: hsl(32 6% 42%);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --border: hsl(38 10% 86%);
+  --input: hsl(38 10% 84%);
+  --ring: hsl(34 62% 34%);
+  --primary: hsl(34 62% 34%);
+  --primary-foreground: hsl(40 30% 98%);
+  --accent: hsl(40 12% 90%);
+  --accent-foreground: hsl(30 8% 12%);
+  --destructive: hsl(4 64% 46%);
+  --destructive-foreground: hsl(40 30% 98%);
+  --success: hsl(152 48% 34%);
+  --radius: 0.75rem;
+
+  /* Height of the sticky platform navbar (h-16 + 1px border). Game pages
+     size themselves against it so nothing hides underneath. */
+  --nav-h: 65px;
+
+  /* Motion: one easing, three durations. Components stop inventing their own. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 520ms;
+}
+
+.dark {
+  --background: hsl(30 8% 7%);
+  --surface: hsl(30 7% 10%);
+  --surface-2: hsl(30 7% 14%);
+  --foreground: hsl(40 18% 94%);
+  --muted: hsl(30 6% 16%);
+  --muted-foreground: hsl(36 8% 64%);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --border: hsl(32 7% 20%);
+  --input: hsl(32 7% 24%);
+  --ring: hsl(40 78% 60%);
+  --primary: hsl(40 72% 58%);
+  --primary-foreground: hsl(30 12% 10%);
+  --accent: hsl(30 7% 17%);
+  --accent-foreground: hsl(40 18% 94%);
+  --destructive: hsl(6 62% 52%);
+  --destructive-foreground: hsl(40 30% 98%);
+  --success: hsl(152 46% 50%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 0.25rem);
+  --radius-sm: calc(var(--radius) - 0.4rem);
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-display: "Bricolage Grotesque", var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Type scale: display and title are fluid so headings hold their weight
+     from 375px up without per-page overrides. */
+  --text-display: clamp(2.5rem, 6.2vw, 4rem);
+  --text-display--line-height: 0.96;
+  --text-display--letter-spacing: -0.035em;
+  --text-title: clamp(1.6rem, 3.2vw, 2.25rem);
+  --text-title--line-height: 1.08;
+  --text-title--letter-spacing: -0.02em;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  /* Respect users who prefer reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  /* Visible focus for keyboard users. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Shared animation vocabulary — games choreograph these differently.
+   Disabled automatically by the reduced-motion rule above. */
+@keyframes sgp-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sgp-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes sgp-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sgp-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+.animate-fade-up {
+  animation: sgp-fade-up 0.4s ease-out both;
+}
+.animate-pop {
+  animation: sgp-pop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.animate-slide-in {
+  animation: sgp-slide-in 0.35s ease-out both;
+}
+.animate-shake {
+  animation: sgp-shake 0.4s ease-in-out both;
+}
+
+/* --- Hero line-art illustration -------------------------------------------
+   The source PNG is black line-art on a solid white background. We drop the
+   white out with a blend mode so only the strokes remain, fade the whole
+   thing toward the content with a gradient mask, and tint it toward the blue
+   accent so it reads as an integrated editorial illustration rather than a
+   pasted-in photo. In dark mode the artwork is inverted first, turning the
+   black strokes into light ones over the dark-blue banner. */
+.hero-illustration {
+  opacity: 0.1;
+  mix-blend-mode: multiply;
+  filter: contrast(1.05);
+  /* Fade the artwork into the banner left-to-right. object-cover makes the
+     bitmap fill the box width, so its left edge sits exactly where this mask
+     is fully transparent — no hard vertical seam, just a soft dissolve. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.04) 16%,
+    rgba(0, 0, 0, 0.4) 38%,
+    #000 66%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.04) 16%,
+    rgba(0, 0, 0, 0.4) 38%,
+    #000 66%
+  );
+  transform: translateX(6%) scale(1.02);
+  animation: sgp-hero-art-in 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+}
+
+@media (min-width: 640px) {
+  .hero-illustration {
+    opacity: 0.16;
+  }
+}
+
+.dark .hero-illustration {
+  opacity: 0.15;
+  mix-blend-mode: screen;
+  /* invert strokes to light, then nudge toward the banner's blue */
+  filter: invert(1) sepia(0.4) hue-rotate(185deg) saturate(1.4) contrast(1.05);
+}
+
+@media (min-width: 640px) {
+  .dark .hero-illustration {
+    opacity: 0.3;
+  }
+}
+
+@keyframes sgp-hero-art-in {
+  from {
+    opacity: 0;
+    transform: translateX(10%) scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-illustration {
+    animation: none;
+  }
+}
+
+/* ── Game viewport ─────────────────────────────────────────────────────────
+   The usable height under the navbar. `dvh`, not `vh`: on phones `100vh`
+   includes the area behind the browser's own toolbars, so a page sized with
+   it hides its bottom controls exactly where the thumb is. Purely a size —
+   every game decides for itself what fills it. */
+.game-viewport {
+  min-height: calc(100dvh - var(--nav-h));
+}
+.game-viewport-fixed {
+  height: calc(100dvh - var(--nav-h));
+}
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* ── Game covers ───────────────────────────────────────────────────────────
+   A hairline edge drawn above the art, so a pale cover (Estimania, Size It
+   Up) never melts into a light page. Hover lifts the cover a little; focus
+   draws the ring around the cover, which is what the eye goes to. */
+.game-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+  pointer-events: none;
+}
+.dark .game-cover::after {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09);
+}
+.cover-link .game-cover {
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+.cover-link:hover .game-cover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px -16px rgb(0 0 0 / 0.45);
+}
+.cover-link:focus-visible {
+  outline: none;
+}
+.cover-link:focus-visible .game-cover {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover-link .game-cover {
+    transition: none;
+  }
+  .cover-link:hover .game-cover {
+    transform: none;
+  }
+}

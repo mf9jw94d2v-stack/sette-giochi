@@ -1,0 +1,221 @@
+/* ── Fact Map · «L'atlante» ────────────────────────────────────────────────
+   Local design system. Loaded only with this game's chunk, scoped under .fm,
+   so nothing here can leak into — or be borrowed by — another game.
+   Crisp cartographic panels: small radius, hairline rules, spaced capitals. */
+
+.fm {
+  --fm-ocean: #d9e2e8;
+  --fm-ocean-line: rgba(43, 39, 34, 0.07);
+  --fm-land: #ebe2cf;
+  --fm-coast: #a3957a;
+  --fm-panel: rgba(250, 247, 240, 0.94);
+  --fm-paper: #faf7f0;
+  --fm-ink: #2b2722;
+  --fm-muted: #665d51;
+  --fm-rule: #cdc3ac;
+  --fm-accent: #c2410c;
+  --fm-accent-ink: #fff7ed;
+  --fm-truth: #047857;
+  --fm-radius: 6px;
+  --fm-hover: rgba(43, 39, 34, 0.05);
+  --fm-tool-hover: #f1ebde;
+  --fm-backdrop: rgba(43, 39, 34, 0.35);
+  --fm-shadow:
+    0 1px 0 rgba(43, 39, 34, 0.04), 0 12px 28px -14px rgba(43, 39, 34, 0.4);
+
+  font-family: Outfit, Inter, system-ui, sans-serif;
+  color: var(--fm-ink);
+  background: var(--fm-ocean);
+  color-scheme: light;
+}
+
+.fm-panel {
+  background: var(--fm-panel);
+  border: 1px solid var(--fm-rule);
+  border-radius: var(--fm-radius);
+  box-shadow: var(--fm-shadow);
+  backdrop-filter: blur(6px);
+}
+
+/* Cartographic caption: small spaced capitals (verified on the original). */
+.fm-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fm-muted);
+}
+
+.fm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border-radius: var(--fm-radius);
+  background: var(--fm-accent);
+  color: var(--fm-accent-ink);
+  font-weight: 600;
+  transition:
+    filter var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.fm-btn:hover:not(:disabled) {
+  filter: brightness(1.07);
+}
+.fm-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.fm-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.fm-btn-quiet {
+  background: transparent;
+  color: var(--fm-ink);
+  border: 1px solid var(--fm-rule);
+}
+.fm-btn-quiet:hover:not(:disabled) {
+  filter: none;
+  background: var(--fm-hover);
+}
+
+/* Map tools: square, stacked, like the zoom block of a real web map. */
+.fm-tool {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: var(--fm-paper);
+  color: var(--fm-ink);
+  border-bottom: 1px solid var(--fm-rule);
+}
+.fm-tool:last-child {
+  border-bottom: 0;
+}
+.fm-tool:hover {
+  background: var(--fm-tool-hover);
+}
+@media (min-width: 640px) {
+  .fm-tool {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.fm-tab {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 4px;
+  color: var(--fm-muted);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.fm-tab[aria-selected="true"] {
+  background: var(--fm-ink);
+  color: var(--fm-paper);
+}
+
+.fm :focus-visible {
+  outline: 2px solid var(--fm-ink);
+  outline-offset: 2px;
+}
+
+.fm-map {
+  touch-action: none;
+  cursor: crosshair;
+}
+.fm-map[data-panning="true"] {
+  cursor: grabbing;
+}
+.fm-map[data-locked="true"] {
+  cursor: grab;
+}
+
+/* The pin drops in rather than appearing. */
+@keyframes fm-drop {
+  from {
+    transform: translateY(-14px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.fm-pin {
+  animation: fm-drop var(--dur-base) var(--ease-out);
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+@keyframes fm-route {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.fm-route {
+  stroke-dasharray: 1;
+  animation: fm-route var(--dur-slow) var(--ease-out) both;
+}
+
+.fm-dialog {
+  max-width: min(32rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 1px solid var(--fm-rule);
+  border-radius: var(--fm-radius);
+  background: var(--fm-paper);
+  color: var(--fm-ink);
+  font-family: Outfit, Inter, system-ui, sans-serif;
+  box-shadow: var(--fm-shadow);
+}
+.fm-dialog::backdrop {
+  background: var(--fm-backdrop);
+  backdrop-filter: blur(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-pin,
+  .fm-route {
+    animation: none;
+  }
+}
+
+/* The platform styles every h1–h3 in its own display face (@layer base).
+   Inside this game, headings take the game's type instead. Declared in the
+   same layer so it beats that rule, while any class of this game's own —
+   which is unlayered — still beats it. */
+@layer base {
+  .fm :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Dark theme · «L'atlante notturno» ─────────────────────────────────────
+   A night chart: deep sea, dim olive land, coastlines drawn in pale bronze,
+   cream labels. The pin keeps its orange and the truth its green, both
+   lifted for the dark water. */
+.dark .fm {
+  --fm-ocean: #0e1a24;
+  --fm-ocean-line: rgba(236, 230, 217, 0.07);
+  --fm-land: #2a2f28;
+  --fm-coast: #7a8571;
+  --fm-panel: rgba(20, 24, 28, 0.94);
+  --fm-paper: #171b1f;
+  --fm-ink: #ece6d9;
+  --fm-muted: #a99f8f;
+  --fm-rule: #3a4046;
+  --fm-accent: #f97316;
+  --fm-accent-ink: #1c0a02;
+  --fm-truth: #34d399;
+  --fm-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 12px 28px -14px rgba(0, 0, 0, 0.7);
+  --fm-hover: rgba(236, 230, 217, 0.06);
+  --fm-tool-hover: #22272c;
+  --fm-backdrop: rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}

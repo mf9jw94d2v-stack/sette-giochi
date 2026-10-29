@@ -1,0 +1,204 @@
+/* ── Estimania · «Il quaderno di stima» ────────────────────────────────────
+   Local design system, scoped under .es, loaded only with this chunk.
+   A page of an editorial magazine about numbers: warm paper, black ink, a
+   serif for the question and — above all — for the number. Teal is the
+   original's own colour (verified), the estimate is amber. */
+
+.es {
+  --es-paper: #f7f5f0;
+  --es-paper-2: #efeae0;
+  --es-ink: #1c1917;
+  --es-muted: #57534e;
+  --es-rule: #d8d1c3;
+  --es-teal: #0d9488;
+  --es-teal-ink: #0f766e;
+  --es-guess: #b45309;
+  --es-good: #15803d;
+  --es-bad: #b91c1c;
+  --es-on-teal: #ffffff;
+  --es-teal-deep: #115e59;
+  --es-teal-soft: rgba(13, 148, 136, 0.14);
+  --es-backdrop: rgba(28, 25, 23, 0.35);
+
+  color-scheme: light;
+
+  background: var(--es-paper);
+  color: var(--es-ink);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.es-serif {
+  font-family: Fraunces, Georgia, "Times New Roman", serif;
+  font-optical-sizing: auto;
+}
+.es-num {
+  font-family: Fraunces, Georgia, serif;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.es-kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--es-teal-ink);
+}
+
+.es-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0 1.75rem;
+  border-radius: 0.75rem;
+  background: var(--es-teal-ink);
+  color: var(--es-on-teal);
+  font-weight: 600;
+  font-size: 1rem;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.es-btn:hover:not(:disabled) {
+  background: var(--es-teal-deep);
+}
+.es-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.es-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.es-btn-quiet {
+  background: transparent;
+  color: var(--es-ink);
+  border: 1px solid var(--es-rule);
+}
+.es-btn-quiet:hover:not(:disabled) {
+  background: var(--es-paper-2);
+}
+
+.es-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 0.75rem;
+  color: var(--es-muted);
+}
+.es-icon:hover {
+  background: var(--es-paper-2);
+  color: var(--es-ink);
+}
+@media (min-width: 640px) {
+  .es-icon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.es-tab {
+  padding: 0.4rem 0.9rem;
+  border-radius: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--es-muted);
+}
+.es-tab[aria-selected="true"] {
+  background: var(--es-ink);
+  color: var(--es-paper);
+}
+
+/* The answer field: a number set like a headline, on a single rule. */
+.es-field {
+  width: 100%;
+  min-width: 0;
+  padding: 0.1em 0;
+  border: 0;
+  border-bottom: 3px solid var(--es-ink);
+  background: transparent;
+  color: var(--es-guess);
+  font-family: Fraunces, Georgia, serif;
+  font-variant-numeric: lining-nums;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  outline: none;
+}
+.es-field::placeholder {
+  color: var(--es-rule);
+}
+.es-field:focus {
+  border-bottom-color: var(--es-teal);
+}
+/* Its own focus cue is the 3px teal rule; a box around it as well read as
+   a form field, which is exactly what this is designed not to look like. */
+.es .es-field:focus-visible {
+  outline: none;
+}
+
+.es :focus-visible {
+  outline: 2px solid var(--es-teal-ink);
+  outline-offset: 3px;
+}
+
+@keyframes es-pin {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+.es-pin {
+  animation: es-pin var(--dur-base) var(--ease-out);
+}
+
+.es-dialog {
+  max-width: min(34rem, calc(100vw - 2rem));
+  padding: 1.75rem;
+  border: 1px solid var(--es-rule);
+  border-radius: 1rem;
+  background: var(--es-paper);
+  color: var(--es-ink);
+}
+.es-dialog::backdrop {
+  background: var(--es-backdrop);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .es-pin {
+    animation: none;
+  }
+}
+
+/* The platform styles every h1–h3 in its own display face (@layer base).
+   Inside this game, headings take the game's type instead. Declared in the
+   same layer so it beats that rule, while any class of this game's own —
+   which is unlayered — still beats it. */
+@layer base {
+  .es :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Dark theme · «Il quaderno di notte» ───────────────────────────────────
+   The same notebook under a desk lamp: warm dark paper, cream ink, the teal
+   brightened so the numbers still glow. */
+.dark .es {
+  --es-paper: #17150f;
+  --es-paper-2: #221f18;
+  --es-ink: #f1ebdf;
+  --es-muted: #aaa294;
+  --es-rule: #3b362c;
+  --es-teal: #2dd4bf;
+  --es-teal-ink: #5eead4;
+  --es-guess: #fbbf24;
+  --es-good: #4ade80;
+  --es-bad: #f87171;
+  --es-on-teal: #042f2c;
+  --es-teal-deep: #99f6e4;
+  --es-teal-soft: rgba(45, 212, 191, 0.16);
+  --es-backdrop: rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}

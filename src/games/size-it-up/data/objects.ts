@@ -1,0 +1,263 @@
+import type { SizeObject } from "../types";
+
+/**
+ * The catalogue of objects compared in Size It Up.
+ *
+ * HOW TO READ `sizeM` AND `source`.
+ * Each entry carries ONE measurement, taken along ONE axis, and says where it
+ * comes from. Two kinds of entry exist and they are not mixed up:
+ *
+ *   • A landmark or a specific machine has a published figure. `source` names
+ *     the article that states it and `sourceUrl` links to it.
+ *   • An everyday object has no authority to cite. Its `source` says so in as
+ *     many words ("valore tipico"), and `precision` says how much it varies.
+ *     We do not invent a decimal place to make it look researched.
+ *
+ * Nothing here is a guess dressed up as a fact. A value that could not be
+ * stated honestly was left out of the catalogue instead.
+ */
+export const SIZE_OBJECTS: readonly SizeObject[] = [
+  // ---------- Oggetti quotidiani ----------
+  {
+    id: "matita",
+    label: "Matita",
+    category: "Oggetti quotidiani",
+    sizeM: 0.19,
+    axis: "lunghezza",
+    silhouette: "pencil",
+    source: "Valore tipico di una matita esagonale nuova",
+    precision: "Varia fra circa 17 e 19 cm secondo la marca.",
+    note: "Una matita nuova scrive per circa 50 km di tratto continuo.",
+  },
+  {
+    id: "chitarra",
+    label: "Chitarra acustica",
+    category: "Oggetti quotidiani",
+    sizeM: 1.02,
+    axis: "lunghezza",
+    silhouette: "guitar",
+    source: "Valore tipico per una dreadnought da concerto",
+    precision: "Fra circa 98 e 105 cm secondo il modello.",
+  },
+  {
+    id: "persona",
+    label: "Persona adulta",
+    category: "Oggetti quotidiani",
+    sizeM: 1.7,
+    axis: "altezza",
+    silhouette: "person",
+    source: "Valore di riferimento convenzionale",
+    precision:
+      "Statura media molto variabile fra popolazioni: qui è un riferimento tondo, non una media.",
+  },
+  {
+    id: "porta",
+    label: "Porta d'ingresso",
+    category: "Oggetti quotidiani",
+    sizeM: 2.03,
+    axis: "altezza",
+    silhouette: "door",
+    source: "Misura commerciale comune in Italia (210 cm di luce, 203 di anta)",
+    precision: "Le ante standard vanno da 200 a 210 cm.",
+  },
+  {
+    id: "scala",
+    label: "Scala a pioli domestica",
+    category: "Oggetti quotidiani",
+    sizeM: 3.0,
+    axis: "altezza",
+    silhouette: "ladder",
+    source: "Valore tipico di una scala domestica da 10 pioli",
+    precision: "Le misure commerciali vanno da 2 a 4 m.",
+  },
+  {
+    id: "semaforo",
+    label: "Semaforo stradale",
+    category: "Oggetti quotidiani",
+    sizeM: 3.0,
+    axis: "altezza",
+    silhouette: "trafficlight",
+    source: "Valore tipico dell'altezza complessiva del palo",
+    precision: "Dipende dall'installazione: in genere fra 2,5 e 3,5 m.",
+  },
+  {
+    id: "campo",
+    label: "Campo da calcio",
+    category: "Oggetti quotidiani",
+    sizeM: 105,
+    axis: "lunghezza",
+    silhouette: "pitch",
+    source: "FIFA, Regole del Gioco — misura delle partite internazionali",
+    sourceUrl: "https://it.wikipedia.org/wiki/Campo_da_calcio",
+    precision:
+      "Le regole ammettono da 90 a 120 m; 105 × 68 è la misura delle competizioni internazionali.",
+    note: "Un campo regolamentare è lungo quanto tre Boeing 747 in fila.",
+  },
+
+  // ---------- Veicoli ----------
+  {
+    id: "bicicletta",
+    label: "Bicicletta da città",
+    category: "Veicoli",
+    sizeM: 1.75,
+    axis: "lunghezza",
+    silhouette: "bicycle",
+    source: "Valore tipico fuori tutto per una city bike",
+    precision: "Fra circa 1,7 e 1,8 m secondo la taglia.",
+  },
+  {
+    id: "automobile",
+    label: "Automobile (berlina compatta)",
+    category: "Veicoli",
+    sizeM: 4.35,
+    axis: "lunghezza",
+    silhouette: "car",
+    source: "Valore tipico del segmento C europeo",
+    precision: "Il segmento va da circa 4,2 a 4,5 m.",
+  },
+  {
+    id: "autobus",
+    label: "Autobus urbano",
+    category: "Veicoli",
+    sizeM: 12,
+    axis: "lunghezza",
+    silhouette: "bus",
+    source: "Lunghezza standard dell'autobus urbano a due assi",
+    precision: "Gli snodati arrivano a 18 m.",
+  },
+  {
+    id: "camion",
+    label: "Autoarticolato",
+    category: "Veicoli",
+    sizeM: 16.5,
+    axis: "lunghezza",
+    silhouette: "truck",
+    source: "Lunghezza massima ammessa in Unione Europea per un autoarticolato",
+    sourceUrl: "https://it.wikipedia.org/wiki/Autoarticolato",
+    precision: "16,50 m è il limite di legge, non una misura media.",
+  },
+  {
+    id: "boeing",
+    label: "Boeing 747-400",
+    category: "Veicoli",
+    sizeM: 64.4,
+    axis: "apertura alare",
+    silhouette: "airliner",
+    source: "Wikipedia — Boeing 747",
+    sourceUrl: "https://it.wikipedia.org/wiki/Boeing_747",
+    note: "L'apertura alare supera la distanza del primo volo dei fratelli Wright.",
+  },
+  {
+    id: "saturn",
+    label: "Razzo Saturn V",
+    category: "Veicoli",
+    sizeM: 110.6,
+    axis: "altezza",
+    silhouette: "rocket",
+    source: "Wikipedia — Saturn V",
+    sourceUrl: "https://it.wikipedia.org/wiki/Saturn_V",
+    note: "Resta il razzo più potente mai portato in servizio.",
+  },
+  {
+    id: "nave",
+    label: "Nave portacontainer",
+    category: "Veicoli",
+    sizeM: 400,
+    axis: "lunghezza",
+    silhouette: "ship",
+    source: "Lunghezza fuori tutto delle portacontainer di classe ULCV",
+    sourceUrl: "https://it.wikipedia.org/wiki/Nave_portacontainer",
+    precision: "Le più grandi in servizio misurano circa 400 m.",
+  },
+
+  // ---------- Architettura ----------
+  {
+    id: "casa",
+    label: "Casa a due piani",
+    category: "Architettura",
+    sizeM: 8,
+    axis: "altezza",
+    silhouette: "house",
+    source: "Valore tipico al colmo del tetto",
+    precision: "Dipende dal tetto: in genere fra 7 e 9 m.",
+  },
+  {
+    id: "faro",
+    label: "Faro costiero",
+    category: "Architettura",
+    sizeM: 30,
+    axis: "altezza",
+    silhouette: "lighthouse",
+    source: "Valore tipico di un faro costiero di media portata",
+    precision: "I fari vanno da pochi metri a oltre 70.",
+  },
+  {
+    id: "pisa",
+    label: "Torre di Pisa",
+    category: "Architettura",
+    sizeM: 55.86,
+    axis: "altezza",
+    silhouette: "pisa",
+    source: "Wikipedia — Torre di Pisa",
+    sourceUrl: "https://it.wikipedia.org/wiki/Torre_di_Pisa",
+    precision:
+      "55,86 m sul lato basso e 56,67 sul lato alto: la torre pende, quindi ha due altezze.",
+    note: "L'inclinazione è di circa 4 gradi: la cima è spostata di quasi 4 m.",
+  },
+  {
+    id: "bigben",
+    label: "Torre Elisabetta (Big Ben)",
+    category: "Architettura",
+    sizeM: 96,
+    axis: "altezza",
+    silhouette: "bigben",
+    source: "Wikipedia — Elizabeth Tower",
+    sourceUrl: "https://it.wikipedia.org/wiki/Torre_Elisabetta",
+    note: "Big Ben è la campana, non la torre.",
+  },
+  {
+    id: "londoneye",
+    label: "London Eye",
+    category: "Architettura",
+    sizeM: 135,
+    axis: "altezza",
+    silhouette: "londoneye",
+    source: "Wikipedia — London Eye",
+    sourceUrl: "https://it.wikipedia.org/wiki/London_Eye",
+    note: "Un giro completo dura circa 30 minuti.",
+  },
+  {
+    id: "piramide",
+    label: "Piramide di Cheope",
+    category: "Architettura",
+    sizeM: 138.5,
+    axis: "altezza",
+    silhouette: "pyramid",
+    source: "Wikipedia — Piramide di Cheope",
+    sourceUrl: "https://it.wikipedia.org/wiki/Piramide_di_Cheope",
+    precision:
+      "Altezza attuale: originariamente misurava circa 146,6 m, prima di perdere il rivestimento.",
+  },
+  {
+    id: "eiffel",
+    label: "Torre Eiffel",
+    category: "Architettura",
+    sizeM: 330,
+    axis: "altezza",
+    silhouette: "eiffel",
+    source: "Wikipedia — Torre Eiffel",
+    sourceUrl: "https://it.wikipedia.org/wiki/Torre_Eiffel",
+    precision: "Antenne comprese; il tetto è a 300 m.",
+  },
+  {
+    id: "burj",
+    label: "Burj Khalifa",
+    category: "Architettura",
+    sizeM: 828,
+    axis: "altezza",
+    silhouette: "burj",
+    source: "Wikipedia — Burj Khalifa",
+    sourceUrl: "https://it.wikipedia.org/wiki/Burj_Khalifa",
+    note: "Dalla base alla guglia: l'edificio più alto del mondo dal 2010.",
+  },
+];

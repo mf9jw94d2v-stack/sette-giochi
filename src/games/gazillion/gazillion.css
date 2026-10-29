@@ -1,0 +1,281 @@
+/* ── Gazillion · «Il viaggio nel tempo» ───────────────────────────────────
+   Local design system, scoped under .gz, loaded only with this chunk.
+   The page reads left to right like the timeline it is built around: deep,
+   starry past on the left, warm dawn of the present on the right. Controls
+   are pills with amber handles (verified on the original); display type is
+   Unbounded, wide and round; years are monospaced. */
+
+.gz {
+  --gz-deep: #0c0a1d;
+  --gz-mid: #1e0b2e;
+  --gz-dawn: #4c0519;
+  --gz-ink: #fdf2f8;
+  --gz-muted: #cbbcdc;
+  --gz-line: rgba(253, 242, 248, 0.16);
+  --gz-amber: #fbbf24;
+  --gz-amber-ink: #1f1404;
+  --gz-hit: #4ade80;
+  --gz-miss: #fb7185;
+  --gz-amber-glow: rgba(251, 191, 36, 0.5);
+  --gz-amber-halo: rgba(251, 191, 36, 0.16);
+  --gz-amber-ring: rgba(251, 191, 36, 0.6);
+  --gz-hover: rgba(253, 242, 248, 0.07);
+  --gz-field: rgba(12, 10, 29, 0.55);
+  --gz-backdrop: rgba(12, 10, 29, 0.7);
+  /* Timeline: alternating bands, the trap, and a trap that caught the year. */
+  --gz-band-a: rgba(253, 242, 248, 0.07);
+  --gz-band-b: rgba(253, 242, 248, 0.03);
+  --gz-trap: rgba(251, 191, 36, 0.24);
+  --gz-trap-soft: rgba(251, 191, 36, 0.14);
+  --gz-trap-strong: rgba(251, 191, 36, 0.55);
+  --gz-hit-soft: rgba(74, 222, 128, 0.22);
+  /* Text set on the hit/miss colours. */
+  --gz-on-mark: #0c0a1d;
+
+  color-scheme: dark;
+
+  color: var(--gz-ink);
+  font-family: Inter, system-ui, sans-serif;
+  background:
+    radial-gradient(
+      1px 1px at 8% 18%,
+      rgba(255, 255, 255, 0.55),
+      transparent 60%
+    ),
+    radial-gradient(
+      1px 1px at 17% 64%,
+      rgba(255, 255, 255, 0.4),
+      transparent 60%
+    ),
+    radial-gradient(
+      1.5px 1.5px at 26% 32%,
+      rgba(255, 255, 255, 0.45),
+      transparent 60%
+    ),
+    radial-gradient(
+      1px 1px at 34% 82%,
+      rgba(255, 255, 255, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      1px 1px at 4% 46%,
+      rgba(255, 255, 255, 0.4),
+      transparent 60%
+    ),
+    linear-gradient(
+      100deg,
+      var(--gz-deep) 0%,
+      var(--gz-mid) 52%,
+      var(--gz-dawn) 100%
+    );
+}
+
+.gz-display {
+  font-family: Unbounded, Inter, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+.gz-year {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.gz-kicker {
+  font-family: Unbounded, Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gz-muted);
+}
+
+.gz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  background: var(--gz-amber);
+  color: var(--gz-amber-ink);
+  font-family: Unbounded, Inter, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+  box-shadow: 0 0 0 0 var(--gz-amber-glow);
+}
+.gz-btn:hover:not(:disabled) {
+  box-shadow: 0 0 0 6px var(--gz-amber-halo);
+}
+.gz-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.gz-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.gz-btn-ghost {
+  background: transparent;
+  color: var(--gz-ink);
+  border: 1px solid var(--gz-line);
+  box-shadow: none;
+}
+.gz-btn-ghost:hover:not(:disabled) {
+  background: var(--gz-hover);
+  box-shadow: none;
+}
+
+.gz-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  color: var(--gz-muted);
+}
+.gz-icon:hover {
+  color: var(--gz-ink);
+  background: var(--gz-hover);
+}
+@media (min-width: 640px) {
+  .gz-icon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.gz-tab {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gz-muted);
+}
+.gz-tab[aria-selected="true"] {
+  background: var(--gz-ink);
+  color: var(--gz-mid);
+}
+
+.gz-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--gz-line);
+  background: var(--gz-field);
+  color: var(--gz-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.05rem;
+  text-align: center;
+}
+.gz-input:focus {
+  border-color: var(--gz-amber);
+  outline: none;
+}
+
+.gz :focus-visible {
+  outline: 2px solid var(--gz-amber);
+  outline-offset: 3px;
+}
+
+.gz-track {
+  touch-action: none;
+}
+.gz-handle {
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 56px;
+  margin-left: -11px;
+  margin-top: -28px;
+  border-radius: 999px;
+  background: var(--gz-amber);
+  border: 3px solid var(--gz-mid);
+  cursor: ew-resize;
+  box-shadow: 0 0 0 1px var(--gz-amber-ring);
+}
+.gz-handle::after {
+  /* a wider invisible grip for fingers */
+  content: "";
+  position: absolute;
+  inset: -10px -14px;
+}
+
+@keyframes gz-needle {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+}
+.gz-needle {
+  animation: gz-needle var(--dur-slow) var(--ease-out);
+}
+
+.gz-dialog {
+  max-width: min(32rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 1px solid var(--gz-line);
+  border-radius: 1.5rem;
+  background: var(--gz-mid);
+  color: var(--gz-ink);
+}
+.gz-dialog::backdrop {
+  background: var(--gz-backdrop);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gz-needle {
+    animation: none;
+  }
+}
+
+/* The platform styles every h1–h3 in its own display face (@layer base).
+   Inside this game, headings take the game's type instead. Declared in the
+   same layer so it beats that rule, while any class of this game's own —
+   which is unlayered — still beats it. */
+@layer base {
+  .gz :where(h1, h2, h3) {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+/* ── Light theme · «Il viaggio all'alba» ───────────────────────────────────
+   The timeline by daylight: a pale violet past fading into a peach dawn, no
+   stars, ink-dark type. The handles stay amber, deepened so they hold their
+   contrast on a light sky. */
+:root:not(.dark) .gz {
+  --gz-deep: #efedfb;
+  --gz-mid: #f7eef6;
+  --gz-dawn: #fff0e3;
+  --gz-ink: #1e1033;
+  --gz-muted: #574a6b;
+  --gz-line: rgba(30, 16, 51, 0.16);
+  --gz-amber: #9a4a0a;
+  --gz-amber-ink: #fffbeb;
+  --gz-hit: #15803d;
+  --gz-miss: #be123c;
+  --gz-amber-glow: rgba(154, 74, 10, 0.4);
+  --gz-amber-halo: rgba(154, 74, 10, 0.14);
+  --gz-amber-ring: rgba(154, 74, 10, 0.5);
+  --gz-hover: rgba(30, 16, 51, 0.05);
+  --gz-field: rgba(255, 255, 255, 0.75);
+  --gz-backdrop: rgba(30, 16, 51, 0.35);
+  --gz-band-a: rgba(30, 16, 51, 0.06);
+  --gz-band-b: rgba(30, 16, 51, 0.025);
+  --gz-trap: rgba(154, 74, 10, 0.2);
+  --gz-trap-soft: rgba(154, 74, 10, 0.12);
+  --gz-trap-strong: rgba(154, 74, 10, 0.6);
+  --gz-hit-soft: rgba(21, 128, 61, 0.18);
+  --gz-on-mark: #ffffff;
+
+  color-scheme: light;
+  background: linear-gradient(
+    100deg,
+    var(--gz-deep) 0%,
+    var(--gz-mid) 52%,
+    var(--gz-dawn) 100%
+  );
+}
